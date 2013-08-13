@@ -10,16 +10,17 @@ DROP TABLE IF EXISTS `user` ;
 
 CREATE  TABLE IF NOT EXISTS `user` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `slug` VARCHAR(45) BINARY NOT NULL ,
   `username` VARCHAR(45) NOT NULL ,
   `passwd` VARCHAR(255) NOT NULL ,
   `name` VARCHAR(45) NOT NULL ,
   `created_at` DATETIME NULL ,
   `updated_at` DATETIME NULL ,
   `last_connection` DATETIME NULL ,
-  PRIMARY KEY (`id`) )
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) ,
+  UNIQUE INDEX `slug_UNIQUE` (`slug` ASC) )
 ENGINE = InnoDB;
-
-CREATE UNIQUE INDEX `username_UNIQUE` ON `user` (`username` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -29,14 +30,15 @@ DROP TABLE IF EXISTS `group` ;
 
 CREATE  TABLE IF NOT EXISTS `group` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `slug` VARCHAR(45) BINARY NOT NULL ,
   `name` VARCHAR(45) NOT NULL ,
   `description` TEXT NULL ,
   `created_at` DATETIME NULL ,
   `updated_at` DATETIME NULL ,
-  PRIMARY KEY (`id`) )
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) ,
+  UNIQUE INDEX `slug_UNIQUE` (`slug` ASC) )
 ENGINE = InnoDB;
-
-CREATE UNIQUE INDEX `name_UNIQUE` ON `group` (`name` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -48,21 +50,19 @@ CREATE  TABLE IF NOT EXISTS `user_has_group` (
   `user_id` INT UNSIGNED NOT NULL ,
   `group_id` INT UNSIGNED NOT NULL ,
   PRIMARY KEY (`user_id`, `group_id`) ,
+  INDEX `fk_user_has_group_group` (`group_id` ASC) ,
+  INDEX `fk_user_has_group_user` (`user_id` ASC) ,
   CONSTRAINT `fk_user_has_group_user`
     FOREIGN KEY (`user_id` )
     REFERENCES `user` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_user_has_group_group`
     FOREIGN KEY (`group_id` )
     REFERENCES `group` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-CREATE INDEX `fk_user_has_group_group` ON `user_has_group` (`group_id` ASC) ;
-
-CREATE INDEX `fk_user_has_group_user` ON `user_has_group` (`user_id` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -72,12 +72,13 @@ DROP TABLE IF EXISTS `account_type` ;
 
 CREATE  TABLE IF NOT EXISTS `account_type` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `slug` VARCHAR(45) BINARY NOT NULL ,
   `name` VARCHAR(45) NOT NULL ,
   `description` TEXT NULL ,
-  PRIMARY KEY (`id`) )
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) ,
+  UNIQUE INDEX `slug_UNIQUE` (`slug` ASC) )
 ENGINE = InnoDB;
-
-CREATE UNIQUE INDEX `name_UNIQUE` ON `account_type` (`name` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -87,20 +88,20 @@ DROP TABLE IF EXISTS `account` ;
 
 CREATE  TABLE IF NOT EXISTS `account` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `slug` VARCHAR(255) BINARY NOT NULL ,
   `name` VARCHAR(255) NOT NULL ,
   `description` TEXT NULL ,
   `account_type_id` INT UNSIGNED NOT NULL ,
   PRIMARY KEY (`id`) ,
+  INDEX `account_name` (`name` ASC) ,
+  INDEX `fk_account_account_type` (`account_type_id` ASC) ,
+  UNIQUE INDEX `slug_UNIQUE` (`slug` ASC) ,
   CONSTRAINT `fk_account_account_type`
     FOREIGN KEY (`account_type_id` )
     REFERENCES `account_type` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE RESTRICT
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-CREATE INDEX `account_name` ON `account` (`name` ASC) ;
-
-CREATE INDEX `fk_account_account_type` ON `account` (`account_type_id` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -112,21 +113,19 @@ CREATE  TABLE IF NOT EXISTS `account_has_group` (
   `account_id` INT UNSIGNED NOT NULL ,
   `group_id` INT UNSIGNED NOT NULL ,
   PRIMARY KEY (`account_id`, `group_id`) ,
+  INDEX `fk_account_has_group_group` (`group_id` ASC) ,
+  INDEX `fk_account_has_group_account` (`account_id` ASC) ,
   CONSTRAINT `fk_account_has_group_account`
     FOREIGN KEY (`account_id` )
     REFERENCES `account` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_account_has_group_group`
     FOREIGN KEY (`group_id` )
     REFERENCES `group` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-CREATE INDEX `fk_account_has_group_group` ON `account_has_group` (`group_id` ASC) ;
-
-CREATE INDEX `fk_account_has_group_account` ON `account_has_group` (`account_id` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -136,14 +135,15 @@ DROP TABLE IF EXISTS `field` ;
 
 CREATE  TABLE IF NOT EXISTS `field` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `slug` VARCHAR(45) BINARY NOT NULL ,
   `name` VARCHAR(45) NOT NULL ,
   `description` TEXT NULL ,
   `crypt` TINYINT(1) NOT NULL DEFAULT 0 ,
   `type` ENUM('text','textarea','date','numeric','email','url') NOT NULL ,
-  PRIMARY KEY (`id`) )
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) ,
+  UNIQUE INDEX `slug_UNIQUE` (`slug` ASC) )
 ENGINE = InnoDB;
-
-CREATE UNIQUE INDEX `name_UNIQUE` ON `field` (`name` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -156,21 +156,19 @@ CREATE  TABLE IF NOT EXISTS `account_type_has_field` (
   `field_id` INT UNSIGNED NOT NULL ,
   `position` INT UNSIGNED NOT NULL ,
   PRIMARY KEY (`account_type_id`, `field_id`) ,
+  INDEX `fk_account_type_has_field_field` (`field_id` ASC) ,
+  INDEX `fk_account_type_has_field_account_type` (`account_type_id` ASC) ,
   CONSTRAINT `fk_account_type_has_field_account_type`
     FOREIGN KEY (`account_type_id` )
     REFERENCES `account_type` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE RESTRICT
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_account_type_has_field_field`
     FOREIGN KEY (`field_id` )
     REFERENCES `field` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE RESTRICT
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-CREATE INDEX `fk_account_type_has_field_field` ON `account_type_has_field` (`field_id` ASC) ;
-
-CREATE INDEX `fk_account_type_has_field_account_type` ON `account_type_has_field` (`account_type_id` ASC) ;
 
 
 -- -----------------------------------------------------
@@ -183,24 +181,25 @@ CREATE  TABLE IF NOT EXISTS `account_has_field` (
   `field_id` INT UNSIGNED NOT NULL ,
   `value` TEXT NULL ,
   PRIMARY KEY (`account_id`, `field_id`) ,
+  INDEX `fk_account_has_field_field` (`field_id` ASC) ,
+  INDEX `fk_account_has_field_account` (`account_id` ASC) ,
   CONSTRAINT `fk_account_has_field_account`
     FOREIGN KEY (`account_id` )
     REFERENCES `account` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_account_has_field_field`
     FOREIGN KEY (`field_id` )
     REFERENCES `field` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_account_has_field_field` ON `account_has_field` (`field_id` ASC) ;
 
-CREATE INDEX `fk_account_has_field_account` ON `account_has_field` (`account_id` ASC) ;
-
-CREATE INDEX `account_has_field_value` ON `account_has_field` (`value` ASC) ;
-
+-- -----------------------------------------------------
+-- Placeholder table for view `account_view`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `account_view` (`name` INT, `description` INT, `crypt` INT, `type` INT, `value` INT, `group_id` INT);
 
 -- -----------------------------------------------------
 -- View `account_view`
@@ -212,14 +211,14 @@ CREATE  OR REPLACE VIEW `account_view` AS
     SELECT f.`name` as `name`, f.`description` as `description`, f.`crypt` as `crypt`, f.`type` as `type`, af.`value` as `value`, ag.`group_id` as `group_id`
     FROM `account`
         INNER JOIN `account_has_field` af
-            ON `account`.`id` = `account_has_field`.`account_id`
+            ON `account`.`id` = af.`account_id`
         INNER JOIN `field` f
-            ON `account_has_field`.`field_id` = `field`.`id`
+            ON af.`field_id` = f.`id`
         INNER JOIN `account_type_has_field`
             ON `account_type_has_field`.`account_type_id` = `account`.`account_type_id`
-                AND `account_type_has_field`.`field_id` = `field`.`id`
+                AND `account_type_has_field`.`field_id` = f.`id`
         INNER JOIN `account_has_group` ag
-            ON `account`.`id` = `account_has_group`.`account_id`
+            ON `account`.`id` = ag.`account_id`
     ORDER BY `account_type_has_field`.`position` ASC
 
 $$

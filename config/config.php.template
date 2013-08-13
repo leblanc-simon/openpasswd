@@ -1,5 +1,25 @@
 <?php
+/**
+ * This file is part of the OpenPasswd package.
+ *
+ * (c) Simon Leblanc <contact@leblanc-simon.eu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-Config::add(array(
-
+OpenPasswd\Core\Config::add(array(
+    'debug' => false,
+    
+    // Doctrine configuration 
+    // it's the db.config options
+    // @see http://silex.sensiolabs.org/doc/providers/doctrine.html
+    'doctrine-configuration' => array(
+        'driver'     => 'pdo_mysql',
+        'dbname'     => 'openpasswd',
+        'host'       => 'localhost',
+        'user'       => 'root',
+        'password'   => '',
+        'charset'    => 'utf8',
+    ),
 ));

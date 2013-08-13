@@ -1,0 +1,33 @@
+{
+    "name": "leblanc-simon/openpasswd",
+    "description": "Password manager",
+    "version": "1.0.0",
+    "homepage": "http://github.com/leblanc-simon/openpasswd",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Simon Leblanc",
+            "email": "contact@leblanc-simon.eu",
+            "homepage": "http://www.leblanc-simon.fr",
+            "role": "Developer"
+        }
+    ],
+    
+    "type": "application",
+    
+    "autoload": {
+        "psr-0": {
+            "OpenPasswd": "lib/"
+        }
+    },
+
+    "require": {
+        "silex/silex": "1.*",
+
+        "symfony/security": "~2.3",
+        "monolog/monolog": ">=1.0.0",
+        "doctrine/dbal": "2.2.*"
+    },
+
+    "minimum-stability": "stable"
+}
