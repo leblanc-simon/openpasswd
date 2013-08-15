@@ -60,6 +60,8 @@ class Field extends AbstractApp implements IApplication
     {
         list($name, $description, $crypt, $type) = $this->getDataFromForm();
 
+        $slug = $this->getSlug($name);
+
         $sql = 'INSERT INTO '.$this->table.'
                 (slug, name, description, crypt, type) VALUES
                 (:slug, :name, :description, :crypt, :type);';
@@ -78,15 +80,17 @@ class Field extends AbstractApp implements IApplication
         ));
 
         if ($res === true) {
-            return new JsonResponse(array('message' => 'The field is save'), 201);
+            $object = $this->retrieveBySlug($slug);
+            return new JsonResponse(array('message' => 'The field is save', 'object' => $object), 201);
+        } else {
+            return new ErrorResponse('Error while save the field');
         }
     }
 
 
     private function update($slug)
     {
-        $sql = 'SELECT '.$this->fields.' FROM '.$this->db->quoteIdentifier($this->table).($this->criteria ?: ' WHERE 1=1').' AND slug = ?';
-        $object = $this->db->fetchAssoc($sql, array_merge($this->criteria_values, array($slug)));
+        $object = $this->retrieveBySlug($slug);
 
         if ($object === false) {
             return new ErrorResponse('Impossible to find object '.$slug, 404);
@@ -103,7 +107,7 @@ class Field extends AbstractApp implements IApplication
 
         $stmt = $this->db->prepare($sql);
         if ($stmt === false) {
-            throw new \Exception('Error while insert the field'.(Config::get('debug', false) ?: ' : '.$sql), 500);
+            throw new \Exception('Error while update the field'.(Config::get('debug', false) ?: ' : '.$sql), 500);
         }
 
         $res = $stmt->execute(array(
@@ -116,6 +120,8 @@ class Field extends AbstractApp implements IApplication
 
         if ($res === true) {
             return new JsonResponse(array('message' => 'The field is save'), 200);
+        } else {
+            return new ErrorResponse('Error while save the field');
         }
     }
 

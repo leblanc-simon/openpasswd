@@ -59,7 +59,9 @@ var simple_admin_prototype = {
             {
                 success: function() {
                     that.top_container.removeClass('hide');
-                    onSubmitForm(that.container.find('form'));
+                    onSubmitForm(that.container.find('form'), function(data, text_status, jq_xhr) {
+                        that.updateForm(data.object.slug);
+                    });
                 },
                 error: function() { alert('error'); },
                 complete: this.unWait()

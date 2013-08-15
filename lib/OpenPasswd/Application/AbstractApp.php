@@ -13,6 +13,8 @@ namespace OpenPasswd\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use OpenPasswd\Core\ErrorResponse;
+use OpenPasswd\Core\Config;
+use OpenPasswd\Core\Utils;
 
 abstract class AbstractApp
 {
@@ -58,8 +60,7 @@ abstract class AbstractApp
      */
     public function getAction($slug)
     {
-        $sql = 'SELECT '.$this->fields.' FROM '.$this->db->quoteIdentifier($this->table).($this->criteria ?: ' WHERE 1=1').' AND slug = ?';
-        $object = $this->db->fetchAssoc($sql, array_merge($this->criteria_values, array($slug)));
+        $object = $this->retrieveBySlug($slug);
 
         if ($object === false) {
             return new ErrorResponse('Impossible to find object '.$slug, 404);
@@ -96,5 +97,38 @@ abstract class AbstractApp
         $objects = $this->db->fetchAll($sql, array_merge($this->criteria_values, array($where_values)));
 
         return new JsonResponse($objects);
+    }
+
+
+    protected function getSlug($name)
+    {
+        $base_slug = Utils::toSlug($name);
+
+        $iterator = 0;
+        do {
+            $slug = $base_slug.($iterator++ > 0 ? '-'.$iterator : '');
+
+            $sql = 'SELECT COUNT(id) as nb FROM '.$this->table.' WHERE `slug` = :slug';
+
+            $stmt = $this->db->prepare($sql);
+            if ($stmt === false) {
+                throw new \Exception('Error while count slug'.(Config::get('debug', false) ?: ' : '.$sql), 500);
+            }
+
+            $row = $stmt->execute(array(':slug' => $slug));
+            if ($row === false || $row['nb'] == 0) {
+                $final_slug = $slug;
+            }
+
+        } while (isset($final_slug) === false);
+
+        return $final_slug;
+    }
+
+
+    protected function retrieveBySlug($slug)
+    {
+        $sql = 'SELECT '.$this->fields.' FROM '.$this->db->quoteIdentifier($this->table).($this->criteria ?: ' WHERE 1=1').' AND slug = ?';
+        return $this->db->fetchAssoc($sql, array_merge($this->criteria_values, array($slug)));
     }
 }

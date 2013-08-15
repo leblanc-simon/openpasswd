@@ -51,9 +51,12 @@ function loadPage(hash)
     }
 
     $('.page').addClass('hide');
+    $('header .navbar-nav li').removeClass('active');
 
     if (hash === '') {
         // homepage
+
+        $('header li a[href=#]').parent().addClass('active');
     } else {
         var page = $('#manage-' + hash);
 
@@ -61,12 +64,13 @@ function loadPage(hash)
             var object = page.attr('data-object');
             if (typeof window[object] !== undefined) {
                 window[object].list();
+                $('header li a[href=#' + hash + ']').parent().addClass('active');
             }
         }
     }
 }
 
-function onSubmitForm(form)
+function onSubmitForm(form, callbackAfterSuccess, callbackAfterError)
 {
     form.on('submit', function() {
         var form = $(this);
@@ -88,41 +92,27 @@ function onSubmitForm(form)
             statusCode: {
                 200: function(data, text_status, jq_xhr) {
                     showSuccess(data.message);
+                    if (callbackAfterSuccess) {
+                        callbackAfterSuccess(data, text_status, jq_xhr);
+                    }
                 },
                 201: function(data, text_status, jq_xhr) {
                     showSuccess(data.message);
+                    if (callbackAfterSuccess) {
+                        callbackAfterSuccess(data, text_status, jq_xhr);
+                    }
                 },
                 400: function(jq_xhr, text_status, error_thrown) {
-                    var response = $.parseJSON(jq_xhr.responseText);
-                    if (response && response.description) {
-                        showError(response.description);
-                    } else {
-                        showError(jq_xhr.responseText);
-                    }
+                    callOnSubmitError(jq_xhr, text_status, error_thrown, callbackAfterError);
                 },
                 401: function(jq_xhr, text_status, error_thrown) {
-                    var response = $.parseJSON(jq_xhr.responseText);
-                    if (response && response.description) {
-                        showError(response.description);
-                    } else {
-                        showError(jq_xhr.responseText);
-                    }
+                    callOnSubmitError(jq_xhr, text_status, error_thrown, callbackAfterError);
                 },
                 403: function(jq_xhr, text_status, error_thrown) {
-                    var response = $.parseJSON(jq_xhr.responseText);
-                    if (response && response.description) {
-                        showError(response.description);
-                    } else {
-                        showError(jq_xhr.responseText);
-                    }
+                    callOnSubmitError(jq_xhr, text_status, error_thrown, callbackAfterError);
                 },
                 500: function(jq_xhr, text_status, error_thrown) {
-                    var response = $.parseJSON(jq_xhr.responseText);
-                    if (response && response.description) {
-                        showError(response.description);
-                    } else {
-                        showError(jq_xhr.responseText);
-                    }
+                    callOnSubmitError(jq_xhr, text_status, error_thrown, callbackAfterError);
                 }
             },
             complete: unWait
@@ -130,4 +120,20 @@ function onSubmitForm(form)
 
         return false;
     });
+}
+
+function callOnSubmitError(jq_xhr, text_status, error_thrown, callbackAfterError)
+{
+    try {
+        var response = $.parseJSON(jq_xhr.responseText);
+    } catch (e) {}
+
+    if (response && response.description) {
+        showError(response.description);
+    } else {
+        showError(jq_xhr.responseText);
+    }
+    if (callbackAfterError) {
+        callbackAfterError(jq_xhr, text_status, error_thrown);
+    }
 }
