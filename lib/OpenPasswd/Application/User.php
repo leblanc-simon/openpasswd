@@ -29,38 +29,6 @@ class User extends AbstractApp implements IApplication
     }
 
     /**
-     * Search items in the model
-     */
-    public function searchAction($search)
-    {
-        $searchs = explode(',', $search);
-        if (false === is_array($searchs) || true === empty($search)) {
-            return new ErrorResponse('Bad Query', 400);
-        }
-
-        $available_searchs = array('slug', 'username', 'name');
-
-        $where = array();
-        $where_values = array();
-
-        foreach ($searchs as $search) {
-            list($key, $value) = explode('=', $search);
-            if (false === in_array($key, $available_searchs)) {
-                return new ErrorResponse($key.' is not in available key search ('.implode(', ', $available_searchs).')', 400);
-            }
-
-            $where[] = $key.' LIKE ?';
-            $where_values[] = '%'.$value.'%';
-        }
-        $sql = 'SELECT id, slug, username, name, created_at, updated_at, last_connection
-                FROM user
-                WHERE '.implode(' AND ', $where);
-        $users = $this->db->fetchAll($sql, $where_values);
-
-        return new JsonResponse($users);
-    }
-
-    /**
      * Save the data in the model
      */
     public function saveAction($slug = null)

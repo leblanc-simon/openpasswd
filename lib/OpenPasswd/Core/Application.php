@@ -100,8 +100,9 @@ class Application
 
     static private function getRoutingForModule($app, $class, $route)
     {
+        $default_route_name = strtolower($class);
         $class = '\\OpenPasswd\\Application\\'.$class;
-        $controller = strtolower($class);
+        $controller = $default_route_name;
         $$controller = $app['controllers_factory'];
 
         // List all object
@@ -109,42 +110,42 @@ class Application
             $object = new $class($app);
 
             return $object->listAction();
-        })->bind($controller);
+        })->bind($default_route_name);
 
         // Get item
         $$controller->get('/{slug}', function($slug) use ($app, $class) {
             $object = new $class($app);
 
             return $object->getAction($slug);
-        })->bind($controller.'_get');
+        })->bind($default_route_name.'_get');
 
         // Search
         $$controller->get('/search/{search}', function($search) use ($app, $class) {
             $object = new $class($app);
 
             return $object->searchAction($search);
-        })->bind($controller.'_search');
+        })->bind($default_route_name.'_search');
 
         // Save new item
         $$controller->post('/', function() use ($app, $class) {
             $object = new $class($app);
 
             return $object->saveAction();
-        });
+        })->bind($default_route_name.'_add');
 
         // Save item
         $$controller->post('/{slug}', function($slug) use ($app, $class) {
             $object = new $class($app);
 
             return $object->saveAction($slug);
-        });
+        })->bind($default_route_name.'_update');
 
         // Delete item
         $$controller->delete('/{slug}', function($slug) use ($app, $class) {
             $object = new $class($app);
 
             return $object->deleteAction($slug);
-        });
+        })->bind($default_route_name.'_delete');
 
         // Check the user is login
         $$controller->before(function (\Symfony\Component\HttpFoundation\Request $request) {
