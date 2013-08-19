@@ -39,6 +39,7 @@
         <script src="<?php echo $this->request->getBasePath() ?>/js/functions.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/admin.prototype.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/field.js"></script>
+        <script src="<?php echo $this->request->getBasePath() ?>/js/group.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/app.js"></script>
         <?php } ?>
     </body>

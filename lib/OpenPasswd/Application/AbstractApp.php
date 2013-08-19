@@ -44,6 +44,7 @@ abstract class AbstractApp
             $this->user = $token->getUser();
         }
     }
+    
     /**
      * List all items in the model
      */
@@ -108,7 +109,7 @@ abstract class AbstractApp
         do {
             $slug = $base_slug.($iterator++ > 0 ? '-'.$iterator : '');
 
-            $sql = 'SELECT COUNT(id) as nb FROM '.$this->table.' WHERE `slug` = :slug';
+            $sql = 'SELECT COUNT(id) as nb FROM '.$this->db->quoteIdentifier($this->table).' WHERE `slug` = :slug';
 
             $stmt = $this->db->prepare($sql);
             if ($stmt === false) {
