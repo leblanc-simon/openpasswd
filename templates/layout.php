@@ -5,7 +5,7 @@
         <title>OpenPasswd</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
         <link href="<?php echo $this->request->getBasePath() ?>/css/styles.css" rel="stylesheet" media="screen">
         <link href="<?php echo $this->request->getBasePath() ?>/css/bootstrap-glyphicons.css" rel="stylesheet" media="screen">
     </head>
