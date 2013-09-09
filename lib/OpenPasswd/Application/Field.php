@@ -62,27 +62,19 @@ class Field extends AbstractApp implements IApplication
 
         $slug = $this->getSlug($name);
 
-        $sql = 'INSERT INTO '.$this->table.'
-                (slug, name, description, crypt, type) VALUES
-                (:slug, :name, :description, :crypt, :type);';
+        try {
+            $this->db->insert($this->table, array(
+                'slug' => $slug,
+                'name' => $name,
+                'description' => $description,
+                'crypt' => $crypt,
+                'type' => $type,
+            ));
 
-        $stmt = $this->db->prepare($sql);
-        if ($stmt === false) {
-            throw new \Exception('Error while insert the field'.(Config::get('debug', false) ?: ' : '.$sql), 500);
-        }
-
-        $res = $stmt->execute(array(
-            ':slug' => $slug,
-            ':name' => $name,
-            ':description' => $description,
-            ':crypt' => $crypt,
-            ':type' => $type,
-        ));
-
-        if ($res === true) {
             $object = $this->retrieveBySlug($slug);
+            
             return new JsonResponse(array('message' => 'The field is save', 'object' => $object), 201);
-        } else {
+        } catch (\Exception $e) {
             return new ErrorResponse('Error while save the field');
         }
     }
@@ -98,29 +90,16 @@ class Field extends AbstractApp implements IApplication
 
         list($name, $description, $crypt, $type) = $this->getDataFromForm();
 
-        $sql = 'UPDATE '.$this->table.' SET
-                    name = :name, 
-                    description = :description, 
-                    crypt = :crypt, 
-                    type = :type
-                    WHERE id = :id;';
+        try {
+            $this->db->update($this->table, array(
+                'name' => $name,
+                'description' => $description,
+                'crypt' => $crypt,
+                'type' => $type,
+            ), array('id' => $object['id']));
 
-        $stmt = $this->db->prepare($sql);
-        if ($stmt === false) {
-            throw new \Exception('Error while update the field'.(Config::get('debug', false) ?: ' : '.$sql), 500);
-        }
-
-        $res = $stmt->execute(array(
-            ':name' => $name,
-            ':description' => $description,
-            ':crypt' => $crypt,
-            ':type' => $type,
-            ':id' => $object['id'],
-        ));
-
-        if ($res === true) {
             return new JsonResponse(array('message' => 'The field is save'), 200);
-        } else {
+        } catch (\Exception $e) {
             return new ErrorResponse('Error while save the field');
         }
     }
