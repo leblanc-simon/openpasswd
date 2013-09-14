@@ -43,14 +43,16 @@
 
         <!-- JavaScript plugins (requires jQuery) -->
         <script src="http://code.jquery.com/jquery.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/js/bootstrap.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
         <?php if ($must_be_login === false) { ?>
-        <script src="<?php echo $this->request->getBasePath() ?>/js/vendor/jquery.loadTemplate-1.0.0.js"></script>
+        <script src="<?php echo $this->request->getBasePath() ?>/js/vendor/jquery.loadTemplate-1.2.1.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/functions.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/admin.prototype.js"></script>
-        <script src="<?php echo $this->request->getBasePath() ?>/js/field.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/group.js"></script>
+        <script src="<?php echo $this->request->getBasePath() ?>/js/account_type.js"></script>
+        <script src="<?php echo $this->request->getBasePath() ?>/js/field.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/app.js"></script>
         <?php } ?>
     </body>
