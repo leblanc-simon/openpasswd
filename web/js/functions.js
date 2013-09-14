@@ -70,7 +70,7 @@ function loadPage(hash)
     }
 }
 
-function onSubmitForm(form, callbackAfterSuccess, callbackAfterError)
+function onSubmitForm(form, callbackAfterSuccess, callbackAfterError, callbackBefore)
 {
     form.on('submit', function() {
         var form = $(this);
@@ -80,6 +80,12 @@ function onSubmitForm(form, callbackAfterSuccess, callbackAfterError)
         if (!url || !method) {
             showError('Une erreur s\'est produite vous empêchant de soumettre le formulaire');
             return false;
+        }
+
+        if (typeof callbackBefore != 'undefined') {
+            if (callbackBefore(form) === false) {
+                return false;
+            }
         }
 
         wait();

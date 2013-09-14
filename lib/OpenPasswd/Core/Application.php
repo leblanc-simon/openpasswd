@@ -78,11 +78,13 @@ class Application
         }
 
         // Specifics routes
+        // - Homepage
         $app->get('/', function() use ($app) {
             $index = new AppIndex($app);
             return $index->defaultAction();
         })->bind('homepage');
 
+        // - Login / Logout
         $app->get('/login', function() use ($app) {
             $index = new AppIndex($app);
             return $index->loginAction();

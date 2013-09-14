@@ -4,7 +4,7 @@
                         <legend data-content="legend"></legend>
                         <div class="form-group">
                             <label for="fields-add-name">Nom</label>
-                            <input type="text" class="form-control" name="name" id="fields-add-name" placeholder="Entrez le nom du champs" data-value="name">
+                            <input type="text" class="form-control" name="name" id="fields-add-name" value="" placeholder="Entrez le nom du champs" data-value="name">
                         </div>
                         <div class="form-group">
                             <label for="fields-add-description">Description</label>

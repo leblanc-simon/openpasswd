@@ -37,7 +37,17 @@ var simple_admin_prototype = {
                             );
                         },
                         error: function() { alert('error'); },
-                        complete: that.unWait()
+                        complete: that.unWait(),
+                        beforeInsert: function() {
+                            if (typeof that.beforeInsertList != "undefined") {
+                                that.beforeInsertList();
+                            }
+                        },
+                        afterInsert: function() {
+                            if (typeof that.afterInsertList != "undefined") {
+                                that.afterInsertList();
+                            }
+                        }
                     }
                 );
             },
@@ -64,7 +74,17 @@ var simple_admin_prototype = {
                     });
                 },
                 error: function() { alert('error'); },
-                complete: this.unWait()
+                complete: this.unWait(),
+                beforeInsert: function() {
+                    if (typeof that.beforeInsertAdd != "undefined") {
+                        that.beforeInsertAdd();
+                    }
+                },
+                afterInsert: function() {
+                    if (typeof that.afterInsertAdd != "undefined") {
+                        that.afterInsertAdd();
+                    }
+                }
             }
         );
     },
@@ -88,7 +108,17 @@ var simple_admin_prototype = {
                             onSubmitForm(that.container.find('form'));
                         },
                         error: function() { alert('error'); },
-                        complete: that.unWait()
+                        complete: that.unWait(),
+                        beforeInsert: function() {
+                            if (typeof that.beforeInsertUpdate != "undefined") {
+                                that.beforeInsertUpdate();
+                            }
+                        },
+                        afterInsert: function() {
+                            if (typeof that.afterInsertUpdate != "undefined") {
+                                that.afterInsertUpdate();
+                            }
+                        }
                     }
                 );
             },

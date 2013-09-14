@@ -16,7 +16,7 @@
                         <li class="active"><a href="#">Accueil</a></li>
                         <li><a href="#users">Utilisateurs</a></li>
                         <li><a href="#groups">Groupes</a></li>
-                        <li><a href="#account_types">Types de compte</a></li>
+                        <li><a href="#account-types">Types de compte</a></li>
                         <li><a href="#fields">Champs</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
