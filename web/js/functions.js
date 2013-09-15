@@ -35,6 +35,9 @@ function showInfo(message, title)
 function showSuccess(message, title)
 {
     showUserAlert('success', message, title);
+    setTimeout(function() {
+        $('#info-user .alert').alert('close');
+    }, 3000)
 }
 
 function showError(message, title)

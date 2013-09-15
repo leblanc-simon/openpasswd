@@ -32,6 +32,14 @@ header {
     border-bottom: 1px solid #e5e5e5;
 }
 
+#info-user {
+    position: absolute;
+    z-index: 100;
+    top: 5em;
+    right: 0.5em;
+    min-width: 300px;
+}
+
 /**************************
  *
  *  Drag and drop fields
