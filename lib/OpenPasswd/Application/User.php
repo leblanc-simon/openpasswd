@@ -88,10 +88,26 @@ class User extends AbstractApp implements IApplication
      */
     public function deleteAction($slug)
     {
+        try {
+            $object = $this->retrieveBySlug($slug);
 
+            if ($object === false) {
+                return new ErrorResponse('Impossible to find object '.$slug, 404);
+            }
+
+            $this->db->delete('user_has_group', array('user_id' => $object['id']));
+            $this->db->delete($this->db->quoteIdentifier($this->table), array('id' => $object['id']));
+
+            return new JsonResponse(array('message' => 'The user is deleted', 'object' => $object), 200);
+        } catch (\Exception $e) {
+            return new ErrorResponse($e->getMessage(), $e->getCode() !== 0 ? $e->getCode() : 500);
+        }
     }
 
 
+    /**
+     * Insert a new user
+     */
     private function insert()
     {
         list($name, $username, $password, $groups) = $this->getDataFromForm(false);
@@ -99,11 +115,14 @@ class User extends AbstractApp implements IApplication
         $slug = $this->getSlug($name);
 
         try {
-            $this->db->insert($this->table, array(
+            $now = date('Y-m-d H:i:s');
+            $this->db->insert($this->db->quoteIdentifier($this->table), array(
                 'slug' => $slug,
                 'name' => $name,
                 'username' => $username,
                 'passwd' => self::hash($password),
+                'created_at' => $now,
+                'updated_at' => $now,
             ));
 
             $object = $this->retrieveBySlug($slug);
@@ -123,6 +142,9 @@ class User extends AbstractApp implements IApplication
     }
 
 
+    /**
+     * Update an existing user
+     */
     private function update($slug)
     {
         $object = $this->retrieveBySlug($slug);
@@ -134,11 +156,11 @@ class User extends AbstractApp implements IApplication
         list($name, $username, $password, $groups) = $this->getDataFromForm(true);
 
         try {
-            $update_data = array('name' => $name, 'username' => $username);
+            $update_data = array('name' => $name, 'username' => $username, 'updated_at' => date('Y-m-d H:i:s'));
             if (empty($password) === false) {
                 $update_data['passwd'] = self::hash($password);
             }
-            $this->db->update($this->table, $update_data, array('id' => $object['id']));
+            $this->db->update($this->db->quoteIdentifier($this->table), $update_data, array('id' => $object['id']));
 
             // Save fields
             $this->db->delete('user_has_group', array('user_id' => $object['id']));
@@ -155,6 +177,13 @@ class User extends AbstractApp implements IApplication
         }
     }
 
+
+    /**
+     * Extract all parameters from the HTTP request
+     *
+     * @param   bool    $allow_empty_password               True : allow empty password from the HTTP request, false else
+     * @return  array<name, username, password, groups>     The datas of the request
+     */
     private function getDataFromForm($allow_empty_password)
     {
         $name = $this->request->get('name', '');
@@ -181,10 +210,16 @@ class User extends AbstractApp implements IApplication
             throw new \Exception('Groups must be a JSON array', 400);
         }
 
-        return array((string)$name, (string)$username, (string)$password, $groups);
+        return array(trim((string)$name), trim((string)$username), trim((string)$password), $groups);
     }
 
 
+    /**
+     * Get the hash from the passwod
+     *
+     * @param   string  $password   The original password
+     * @return  string              The hash of the password
+     */
     static private function hash($password)
     {
         if (version_compare(PHP_VERSION, '5.3.7', '<')) {

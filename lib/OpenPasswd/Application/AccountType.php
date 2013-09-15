@@ -88,10 +88,13 @@ class AccountType extends AbstractApp implements IApplication
      */
     public function deleteAction($slug)
     {
-
+        throw new \Exception('Not implemented', 501);
     }
 
 
+    /**
+     * Insert a new account type
+     */
     private function insert()
     {
         list($name, $description, $fields) = $this->getDataFromForm();
@@ -124,6 +127,9 @@ class AccountType extends AbstractApp implements IApplication
     }
 
 
+    /**
+     * Update an existing account type
+     */
     private function update($slug)
     {
         $object = $this->retrieveBySlug($slug);
@@ -157,6 +163,12 @@ class AccountType extends AbstractApp implements IApplication
         }
     }
 
+
+    /**
+     * Extract all parameters from the HTTP request
+     *
+     * @return  array<name, description, fields>     The datas of the request
+     */
     private function getDataFromForm()
     {
         $name = $this->request->get('name', '');
@@ -175,6 +187,6 @@ class AccountType extends AbstractApp implements IApplication
             throw new \Exception('Fields must be a JSON array', 400);
         }
 
-        return array((string)$name, (string)$description, $fields);
+        return array(trim((string)$name), trim((string)$description), $fields);
     }
 }

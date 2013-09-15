@@ -49,41 +49,40 @@ class Group extends AbstractApp implements IApplication
      */
     public function deleteAction($slug)
     {
-
+        throw new \Exception('Not implemented', 501);
     }
 
 
+    /**
+     * Insert a new group
+     */
     private function insert()
     {
-        list($name, $description) = $this->getDataFromForm();
+        try {
+            list($name, $description) = $this->getDataFromForm();
 
-        $slug = $this->getSlug($name);
+            $slug = $this->getSlug($name);
 
-        $sql = 'INSERT INTO '.$this->db->quoteIdentifier($this->table).'
-                (slug, name, description, created_at, updated_at) VALUES
-                (:slug, :name, :description, :date, :date);';
+            $now = date('Y-m-d H:i:s');
+            $this->db->insert($this->db->quoteIdentifier($this->table), array(
+                'slug' => $slug,
+                'name' => $name,
+                'description' => $description,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ));
 
-        $stmt = $this->db->prepare($sql);
-        if ($stmt === false) {
-            throw new \Exception('Error while insert the field'.(Config::get('debug', false) ?: ' : '.$sql), 500);
-        }
-
-        $res = $stmt->execute(array(
-            ':slug' => $slug,
-            ':name' => $name,
-            ':description' => $description,
-            ':date' => date('Y-m-d H:i:s'),
-        ));
-
-        if ($res === true) {
             $object = $this->retrieveBySlug($slug);
             return new JsonResponse(array('message' => 'The group is save', 'object' => $object), 201);
-        } else {
-            return new ErrorResponse('Error while save the group');
+        } catch (\Exception $e) {
+            return new ErrorResponse('Error while save the group : '.$e->getMessage());
         }
     }
 
 
+    /**
+     * Update an existing group
+     */
     private function update($slug)
     {
         $object = $this->retrieveBySlug($slug);
@@ -94,31 +93,22 @@ class Group extends AbstractApp implements IApplication
 
         list($name, $description) = $this->getDataFromForm();
 
-        $sql = 'UPDATE '.$this->db->quoteIdentifier($this->table).' SET
-                    name = :name, 
-                    description = :description, 
-                    updated_at = :date
-                    WHERE id = :id;';
-
-        $stmt = $this->db->prepare($sql);
-        if ($stmt === false) {
-            throw new \Exception('Error while update the group'.(Config::get('debug', false) ?: ' : '.$sql), 500);
-        }
-
-        $res = $stmt->execute(array(
-            ':name' => $name,
-            ':description' => $description,
-            ':date' => date('Y-m-d H:i:s'),
-            ':id' => $object['id'],
-        ));
-
-        if ($res === true) {
+        try {
+            $update_data = array('name' => $name, 'description' => $description, 'updated_at' => date('Y-m-d H:i:s'));
+            $this->db->update($this->db->quoteIdentifier($this->table), $update_data, array('id' => $object['id']));
+            
             return new JsonResponse(array('message' => 'The group is save'), 200);
-        } else {
+        } catch (\Exception $e) {
             return new ErrorResponse('Error while save the group');
         }
     }
 
+
+    /**
+     * Extract all parameters from the HTTP request
+     *
+     * @return  array<name, description>     The datas of the request
+     */
     private function getDataFromForm()
     {
         $name = $this->request->get('name', '');
@@ -132,6 +122,6 @@ class Group extends AbstractApp implements IApplication
             throw new \Exception('Description must be a string', 400);
         }
 
-        return array((string)$name, (string)$description);
+        return array(trim((string)$name), trim((string)$description));
     }
 }

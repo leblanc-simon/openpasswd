@@ -52,10 +52,13 @@ class Field extends AbstractApp implements IApplication
      */
     public function deleteAction($slug)
     {
-
+        throw new \Exception('Not implemented', 501);
     }
 
 
+    /**
+     * Insert a new field
+     */
     private function insert()
     {
         list($name, $description, $crypt, $type) = $this->getDataFromForm();
@@ -80,6 +83,9 @@ class Field extends AbstractApp implements IApplication
     }
 
 
+    /**
+     * Update an existing field
+     */
     private function update($slug)
     {
         $object = $this->retrieveBySlug($slug);
@@ -104,6 +110,12 @@ class Field extends AbstractApp implements IApplication
         }
     }
 
+
+    /**
+     * Extract all parameters from the HTTP request
+     *
+     * @return  array<name, description, crypt, type>     The datas of the request
+     */
     private function getDataFromForm()
     {
         $name = $this->request->get('name', '');
@@ -131,6 +143,6 @@ class Field extends AbstractApp implements IApplication
             throw new \Exception('Type must be : '.implode(' or ', self::$available_types), 400);
         }
 
-        return array((string)$name, (string)$description, (int)$crypt, (string)$type);
+        return array(trim((string)$name), trim((string)$description), (int)$crypt, (string)$type);
     }
 }
