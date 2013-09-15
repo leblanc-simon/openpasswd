@@ -120,9 +120,9 @@ class AccountType extends AbstractApp implements IApplication
                 ));
             }
             
-            return new JsonResponse(array('message' => 'The field is save', 'object' => $object), 201);
+            return new JsonResponse(array('message' => 'The account type is save', 'object' => $object), 201);
         } catch (\Exception $e) {
-            return new ErrorResponse('Error while save the field');
+            return new ErrorResponse('Error while save the account type');
         }
     }
 
@@ -157,9 +157,9 @@ class AccountType extends AbstractApp implements IApplication
                 ));
             }
             
-            return new JsonResponse(array('message' => 'The field is save'), 200);
+            return new JsonResponse(array('message' => 'The account type is save'), 200);
         } catch (\Exception $e) {
-            return new ErrorResponse('Error while save the field');
+            return new ErrorResponse('Error while save the account type');
         }
     }
 
