@@ -37,14 +37,14 @@ header {
  *  Drag and drop fields
  *
  **************************/
-.fields-dnd {
+.groups-dnd, .fields-dnd {
     margin: 0;
     padding: 3px;
     border: 1px #eee solid;
     border-radius: 5px;
 }
 
-.fields-dnd li {
+.groups-dnd li, .fields-dnd li {
     padding: 10px 15px;
     border-radius: 5px;
     background-color: #eee;
@@ -54,7 +54,7 @@ header {
     margin-bottom: 5px;
 }
 
-.fields-dnd li:last-child {
+.groups-dnd li:last-child, .fields-dnd li:last-child {
     margin-bottom: 0;
 }
 

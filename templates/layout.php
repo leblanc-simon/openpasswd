@@ -20,10 +20,10 @@
             include __DIR__.'/login.php';
         } else {
             include __DIR__.'/account/account.php';
+            include __DIR__.'/user/user.php';
+            include __DIR__.'/group/group.php';
             include __DIR__.'/account_type/account_type.php';
             include __DIR__.'/field/field.php';
-            include __DIR__.'/group/group.php';
-            include __DIR__.'/user/user.php';
         }
         ?>
         </div>
@@ -50,6 +50,7 @@
         <script src="<?php echo $this->request->getBasePath() ?>/js/vendor/jquery.loadTemplate-1.2.1.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/functions.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/admin.prototype.js"></script>
+        <script src="<?php echo $this->request->getBasePath() ?>/js/user.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/group.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/account_type.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/field.js"></script>
