@@ -53,4 +53,18 @@ $(document).ready(function(){
 
         loadPage();
     });
+
+    // Double list
+    $(document).on('click', '.remove-item', function(){
+        var item = $(this).parent();
+        var source = '#' + item.parent().attr('id');
+        var destination = source.replace('enable', 'available');
+        item.find('.remove-item').remove()
+        item.detach().prependTo(destination);
+        $(source).sortable('refresh');
+        $(destination).sortable('refresh');
+
+        var sorted_ids = $(source).sortable('toArray', { attribute: 'data-id' });
+        $(source).parents('form').find('input[name=' + source.replace('#', '').replace('enable-', '') + ']').val(JSON.stringify(sorted_ids));
+    });
 });

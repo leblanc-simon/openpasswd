@@ -21,11 +21,24 @@ function AccountType()
             that.container.find('form input[name=fields]').val(JSON.stringify(sorted_ids));
         }
 
+        function addRemoveIcon(ui)
+        {
+            ui.item.append('<button type="button" class="remove-item close">&times;</button>');
+        }
+
+        function removeRemoveIcon(ui)
+        {
+            ui.item.find('.remove-item').remove();
+        }
+
         $( "#available-fields, #enable-fields" ).sortable({
             connectWith: ".fields-dnd",
             receive: function(event, ui) {
                 if (ui.item.parents('#available-fields').length) {
+                    removeRemoveIcon(ui);
                     buildItem();
+                } else {
+                    addRemoveIcon(ui);
                 }
             },
             remove: function(event, ui) {
@@ -33,7 +46,7 @@ function AccountType()
                     buildItem();
                 }
             },
-            change: function(event, ui) {
+            update: function(event, ui) {
                 if (ui.item.parents('#enable-fields').length) {
                     buildItem();
                 }
@@ -79,7 +92,7 @@ function AccountType()
         var fields = new Array();
 
         for (var i in data.enable_fields) {
-            enable_fields += '<li class="" data-id="' + data.enable_fields[i].id + '">' + data.enable_fields[i].name + '</li>';
+            enable_fields += '<li class="" data-id="' + data.enable_fields[i].id + '">' + data.enable_fields[i].name + ' <button type="button" class="remove-item close">&times;</button></li>';
             fields.push(data.enable_fields[i].id);
         }
 

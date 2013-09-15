@@ -21,11 +21,24 @@ function User()
             that.container.find('form input[name=groups]').val(JSON.stringify(sorted_ids));
         }
 
+        function addRemoveIcon(ui)
+        {
+            ui.item.append('<button type="button" class="remove-item close">&times;</button>');
+        }
+
+        function removeRemoveIcon(ui)
+        {
+            ui.item.find('.remove-item').remove();
+        }
+
         $( "#available-groups, #enable-groups" ).sortable({
             connectWith: ".groups-dnd",
             receive: function(event, ui) {
                 if (ui.item.parents('#available-groups').length) {
+                    removeRemoveIcon(ui);
                     buildItem();
+                } else {
+                    addRemoveIcon(ui);
                 }
             },
             remove: function(event, ui) {
@@ -33,7 +46,7 @@ function User()
                     buildItem();
                 }
             },
-            change: function(event, ui) {
+            update: function(event, ui) {
                 if (ui.item.parents('#enable-groups').length) {
                     buildItem();
                 }
@@ -79,7 +92,7 @@ function User()
         var groups = new Array();
 
         for (var i in data.enable_groups) {
-            enable_groups += '<li class="" data-id="' + data.enable_groups[i].id + '">' + data.enable_groups[i].name + '</li>';
+            enable_groups += '<li class="" data-id="' + data.enable_groups[i].id + '">' + data.enable_groups[i].name + ' <button type="button" class="remove-item close">&times;</button></li>';
             groups.push(data.enable_groups[i].id);
         }
 
