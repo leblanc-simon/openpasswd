@@ -45,9 +45,19 @@ function showError(message, title)
 function loadPage(hash)
 {
     hash = hash || window.location.hash;
+    var slug = null;
+    var is_new = false;
 
     if (hash.charAt(0) === '#') {
         hash = hash.replace(/^#/, '');
+        if (hash.indexOf('/') != -1) {
+            var split = hash.split('/');
+            hash = split[0];
+            slug = split[1];
+        } else if (hash.indexOf('!new') != -1) {
+            is_new = true;
+            hash = hash.replace('!new', '');
+        }
     }
 
     $('.page').addClass('hide');
@@ -63,7 +73,13 @@ function loadPage(hash)
         if (page.length === 1) {
             var object = page.attr('data-object');
             if (typeof window[object] !== undefined) {
-                window[object].list();
+                if (slug !== null) {
+                    window[object].updateForm(slug);
+                } else if (is_new === true) {
+                    window[object].addForm();
+                } else {
+                    window[object].list();
+                }
                 $('header li a[href=#' + hash + ']').parent().addClass('active');
             }
         }
