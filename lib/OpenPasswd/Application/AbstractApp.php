@@ -10,11 +10,13 @@
 
 namespace OpenPasswd\Application;
 
+use OpenPasswd\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use OpenPasswd\Core\ErrorResponse;
 use OpenPasswd\Core\Config;
 use OpenPasswd\Core\Utils;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 abstract class AbstractApp
 {
@@ -23,6 +25,7 @@ abstract class AbstractApp
     protected $request  = null;
     protected $response = null;
     protected $user     = null;
+    protected $security = null;
 
     protected $table            = null;
     protected $fields           = null;
@@ -34,14 +37,17 @@ abstract class AbstractApp
 
     public function __construct(\Silex\Application $app)
     {
-        $this->app         = $app;
-        $this->db          = $app['db'];
-        $this->request     = $app['request'];
-        $this->response = new \Symfony\Component\HttpFoundation\Response();
+        $this->app          = $app;
+        $this->db           = $app['db'];
+        $this->request      = $app['request'];
+        $this->response     = new \Symfony\Component\HttpFoundation\Response();
 
         $token = $app['security']->getToken();
         if (null !== $token) {
             $this->user = $token->getUser();
+            if ($this->user instanceof UserInterface) {
+                $this->security = new Security($this->user);
+            }
         }
     }
     

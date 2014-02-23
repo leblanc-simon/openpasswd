@@ -10,6 +10,7 @@
 
 namespace OpenPasswd\Application;
 
+use OpenPasswd\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use OpenPasswd\Core\ErrorResponse;
@@ -120,7 +121,7 @@ class User extends AbstractApp implements IApplication
                 'slug' => $slug,
                 'name' => $name,
                 'username' => $username,
-                'passwd' => self::hash($password),
+                'passwd' => Security::hash($password),
                 'created_at' => $now,
                 'updated_at' => $now,
             ));
@@ -158,7 +159,7 @@ class User extends AbstractApp implements IApplication
         try {
             $update_data = array('name' => $name, 'username' => $username, 'updated_at' => date('Y-m-d H:i:s'));
             if (empty($password) === false) {
-                $update_data['passwd'] = self::hash($password);
+                $update_data['passwd'] = Security::hash($password);
             }
             $this->db->update($this->db->quoteIdentifier($this->table), $update_data, array('id' => $object['id']));
 
@@ -211,23 +212,5 @@ class User extends AbstractApp implements IApplication
         }
 
         return array(trim((string)$name), trim((string)$username), trim((string)$password), $groups);
-    }
-
-
-    /**
-     * Get the hash from the passwod
-     *
-     * @param   string  $password   The original password
-     * @return  string              The hash of the password
-     */
-    static private function hash($password)
-    {
-        if (version_compare(PHP_VERSION, '5.3.7', '<')) {
-            return \OpenPasswd\Core\Passwd::password_hash($password, \OpenPasswd\Core\Passwd::PASSWORD_SHA512);
-        } elseif (version_compare(PHP_VERSION, '5.5.0', '<')) {
-            return \OpenPasswd\Core\Passwd::password_hash($password, \OpenPasswd\Core\Passwd::PASSWORD_BCRYPT);
-        } else {
-            return password_hash($password, PASSWORD_BCRYPT);
-        }
     }
 }

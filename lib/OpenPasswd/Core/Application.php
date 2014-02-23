@@ -10,7 +10,9 @@
 
 namespace OpenPasswd\Core;
 
+use OpenPasswd\Application\Account;
 use OpenPasswd\Application\Index as AppIndex;
+use OpenPasswd\User\WebserviceUserProvider;
 
 /**
  * Application class
@@ -97,6 +99,13 @@ class Application
             $index = new AppIndex($app);
             return $index->loginAction();
         })->bind('logout');
+
+        // - View account
+        $app->get('/accounts/show/{slug}', function($slug) use ($app) {
+            $account = new Account($app);
+
+            return $account->showAction($slug);
+        })->bind('account_show');
     }
 
 
@@ -187,8 +196,10 @@ class Application
      */
     static private function registerSecurity()
     {
-        self::getSilexApplication()->register(new \Silex\Provider\SessionServiceProvider());
-        self::getSilexApplication()->register(new \Silex\Provider\SecurityServiceProvider(), array(
+        $app = self::getSilexApplication();
+
+        $app->register(new \Silex\Provider\SessionServiceProvider());
+        $app->register(new \Silex\Provider\SecurityServiceProvider(), array(
             'security.firewalls' => array(
                 'login' => array(
                     'pattern'   => '^/login$',
@@ -197,12 +208,16 @@ class Application
                 'secured' => array(
                     'pattern' => '^.*$',
                     'form' => array('login_path' => '/login', 'check_path' => '/login-check'),
-                    'users' => array(
-                        'admin' => array('ROLE_ADMIN', '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg=='),
-                    )
+                    'users' => $app->share(function() use ($app) {
+                        return new WebserviceUserProvider($app['db']);
+                    }),
                 ),
             ),
         ));
+
+        $app['security.encoder.digest'] = $app->share(function($app) {
+            return new PasswordEncoder();
+        });
     }
 
 
