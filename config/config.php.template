@@ -22,4 +22,9 @@ OpenPasswd\Core\Config::add(array(
         'password'   => '',
         'charset'    => 'utf8',
     ),
+
+    // Crypt
+    'crypt_method'      => 'AES-256-CBC',
+    'crypt_password'    => '',
+    'crypt_iv'          => '',
 ));
