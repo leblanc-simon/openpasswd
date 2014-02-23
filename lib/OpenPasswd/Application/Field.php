@@ -17,14 +17,14 @@ use OpenPasswd\Core\Config;
 
 class Field extends AbstractApp implements IApplication
 {
-    static private $available_types = array('text','textarea','date','numeric','email','url');
+    static private $available_types = array('text', 'textarea', 'date', 'numeric', 'email', 'url');
 
     public function __construct(\Silex\Application $app)
     {
         parent::__construct($app);
 
         $this->table            = 'field';
-        $this->fields           = 'id, slug, name, description, crypt, type';
+        $this->fields           = 'id, slug, name, description, crypt, type, required';
         $this->order            = 'name ASC';
         $this->criteria         = null;
         $this->criteria_values  = array();
@@ -61,7 +61,7 @@ class Field extends AbstractApp implements IApplication
      */
     private function insert()
     {
-        list($name, $description, $crypt, $type) = $this->getDataFromForm();
+        list($name, $description, $crypt, $type, $required) = $this->getDataFromForm();
 
         $slug = $this->getSlug($name);
 
@@ -72,6 +72,7 @@ class Field extends AbstractApp implements IApplication
                 'description' => $description,
                 'crypt' => $crypt,
                 'type' => $type,
+                'required' => $required,
             ));
 
             $object = $this->retrieveBySlug($slug);
@@ -94,7 +95,7 @@ class Field extends AbstractApp implements IApplication
             return new ErrorResponse('Impossible to find object '.$slug, 404);
         }
 
-        list($name, $description, $crypt, $type) = $this->getDataFromForm();
+        list($name, $description, $crypt, $type, $required) = $this->getDataFromForm();
 
         try {
             $this->db->update($this->table, array(
@@ -102,6 +103,7 @@ class Field extends AbstractApp implements IApplication
                 'description' => $description,
                 'crypt' => $crypt,
                 'type' => $type,
+                'required' => $required,
             ), array('id' => $object['id']));
 
             return new JsonResponse(array('message' => 'The field is save'), 200);
@@ -122,6 +124,7 @@ class Field extends AbstractApp implements IApplication
         $description = $this->request->get('description', '');
         $crypt = $this->request->get('crypt', '0');
         $type = $this->request->get('type', '');
+        $required = $this->request->get('required', '0');
 
         if (is_string($name) === false || empty($name) === true) {
             throw new \Exception('Name can\'t be empty', 400);
@@ -143,6 +146,10 @@ class Field extends AbstractApp implements IApplication
             throw new \Exception('Type must be : '.implode(' or ', self::$available_types), 400);
         }
 
-        return array(trim((string)$name), trim((string)$description), (int)$crypt, (string)$type);
+        if (is_numeric($required) === false || ($required != 0 && $required != 1)) {
+            throw new \Exception('Required must be 0 or 1', 400);
+        }
+
+        return array(trim((string)$name), trim((string)$description), (int)$crypt, (string)$type, (int)$required);
     }
 }

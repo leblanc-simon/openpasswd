@@ -16,6 +16,12 @@
                                 Chiffrer le champ en base de données
                             </label>
                         </div>
+                        <div class="form-group checkbox">
+                            <label>
+                                <input type="checkbox" name="required" value="1" data-checked="required" />
+                                Requis
+                            </label>
+                        </div>
                         <div class="form-group">
                             <label>Type de champs</label>
                             <div class="radio">
