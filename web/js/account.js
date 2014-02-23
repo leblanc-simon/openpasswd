@@ -6,6 +6,8 @@ function Account()
     this.tpl_admin_edit = $('#tpl-manage-accounts-edit');
     this.tpl_admin_list = $('#tpl-manage-accounts-list');
     this.tpl_admin_line = $('#tpl-manage-accounts-line');
+    this.tpl_show_account = $('#tpl-manage-accounts-show');
+    this.tpl_show_line = $('#tpl-manage-accounts-show-line');
 
     this.url_list = url_account_list;
     this.url_get = url_account_get;
@@ -39,6 +41,10 @@ function Account()
                     {},
                     {
                         success: function() {
+                            data.unshift({
+                                slug: '',
+                                name: ''
+                            });
                             that.container.find('select[name=search]').loadTemplate(
                                 that.tpl_admin_line,
                                 data,
@@ -113,8 +119,6 @@ function Account()
             type: 'GET',
             dataType: 'json',
             success: function(data, text_status, jq_xhr) {
-                console.log(data);
-
                 var tmpDiv = $('<div></div>');
                 var form_content = '';
 
@@ -157,6 +161,47 @@ function Account()
             }
         });
     };
+
+    this.show = function(slug) {
+        if ('' === slug) {
+            return;
+        }
+
+        this.resetForm();
+        this.wait();
+        that = this;
+
+        $.ajax({
+            url: url_account_show.replace(/--slug--/, slug),
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                $('#account-details').loadTemplate(
+                    that.tpl_show_account,
+                    data.account,
+                    {
+                        success: function() {
+                            $('#account-details .fields').loadTemplate(
+                                that.tpl_show_line,
+                                data.fields
+                            );
+
+                            $('#account-details .fields div[data-type="url"]').each(function(i, item) {
+                                var value = item.innerHTML;
+                                if (value.match(/:\/\//) === null) {
+                                    value = 'http://' + value;
+                                }
+
+                                value = '<a href="'+ value + '">' + value + '</a>';
+                                item.innerHTML = value;
+                            });
+                        },
+                        complete: that.unWait()
+                    }
+                );
+            }
+        });
+    };
 }
 
 Account.prototype = simple_admin_prototype;
@@ -167,5 +212,15 @@ $(document).ready(function(){
     $(document).on('click', '#manage-accounts .create', function() {
         account.prepareForm();
         return false;
+    });
+
+    $(document).on('change', 'select[name="search"]', function() {
+        var slug = $(this).val();
+        account.show(slug);
+        return false;
+    });
+
+    $(document).on('click', '.row-show', function() {
+        $(this).find('.col-md-8').selectText();
     });
 });

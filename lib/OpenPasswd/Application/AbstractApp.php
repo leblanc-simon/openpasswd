@@ -12,7 +12,6 @@ namespace OpenPasswd\Application;
 
 use OpenPasswd\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use OpenPasswd\Core\ErrorResponse;
 use OpenPasswd\Core\Config;
 use OpenPasswd\Core\Utils;
@@ -21,6 +20,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 abstract class AbstractApp
 {
     protected $app      = null;
+
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
     protected $db       = null;
     protected $request  = null;
     protected $response = null;

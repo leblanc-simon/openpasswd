@@ -10,6 +10,7 @@
 
 namespace OpenPasswd\Application;
 
+use OpenPasswd\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use OpenPasswd\Core\ErrorResponse;
@@ -62,6 +63,8 @@ class Account extends AbstractApp implements IApplication
             return new ErrorResponse('Impossible to find object '.$slug, 404);
         }
 
+        $object['description'] = nl2br($object['description']);
+
         $groups = array(6, 7);
         $sql = 'SELECT DISTINCT name, description, crypt, type, value
                 FROM '.$this->db->quoteIdentifier('account_view').'
@@ -71,7 +74,10 @@ class Account extends AbstractApp implements IApplication
 
         for ($i = 0, $max = count($fields); $i < $max; $i++) {
             if ($fields[$i]['crypt'] === '1') {
-                $fields[$i]['value'] = $fields[$i]['value'];
+                $fields[$i]['value'] = $this->security->decrypt($fields[$i]['value']);
+            }
+            if ($fields[$i]['type'] === 'textarea') {
+                $fields[$i]['value'] = nl2br($fields[$i]['value']);
             }
         }
 
@@ -85,8 +91,6 @@ class Account extends AbstractApp implements IApplication
         $description = $this->request->get('description');
         $account_type_slug = $this->request->get('account-type');
 
-        $fields = $this->request->get('field');
-
         $slug = $this->getSlug($name);
 
         $account_type = new AccountType($this->app);
@@ -96,6 +100,8 @@ class Account extends AbstractApp implements IApplication
         }
 
         try {
+            $this->db->beginTransaction();
+
             $this->db->insert($this->table, array(
                 'slug' => $slug,
                 'name' => $name,
@@ -106,16 +112,13 @@ class Account extends AbstractApp implements IApplication
             $object = $this->retrieveBySlug($slug);
 
             // Save fields
-            foreach ($fields as $field_id => $field_value) {
-                $this->db->insert('account_has_field', array(
-                    'account_id' => $object['id'],
-                    'field_id' => $field_id,
-                    'value' => $field_value,
-                ));
-            }
+            $this->insertFields($object['id']);
+
+            $this->db->commit();
 
             return new JsonResponse(array('message' => 'The account type is save', 'object' => $object), 201);
         } catch (\Exception $e) {
+            $this->db->rollback();
             return new ErrorResponse('Error while save the account : '.$e->getMessage());
         }
     }
@@ -132,9 +135,9 @@ class Account extends AbstractApp implements IApplication
         $name = $this->request->get('name');
         $description = $this->request->get('description');
 
-        $fields = $this->request->get('field');
-
         try {
+            $this->db->beginTransaction();
+
             $this->db->update($this->table, array(
                 'name' => $name,
                 'description' => $description,
@@ -144,17 +147,37 @@ class Account extends AbstractApp implements IApplication
             $this->db->delete('account_has_field', array('account_id' => $object['id']));
 
             // Save fields
-            foreach ($fields as $field_id => $field_value) {
-                $this->db->insert('account_has_field', array(
-                    'account_id' => $object['id'],
-                    'field_id' => $field_id,
-                    'value' => $field_value,
-                ));
-            }
+            $this->insertFields($object['id']);
+
+            $this->db->commit();
 
             return new JsonResponse(array('message' => 'The account type is save', 'object' => $object), 201);
         } catch (\Exception $e) {
+            $this->db->rollback();
             return new ErrorResponse('Error while save the account');
+        }
+    }
+
+
+    private function insertFields($account_id)
+    {
+        $fields = $this->request->get('field');
+
+        foreach ($fields as $field_id => $field_value) {
+            $field = $this->db->executeQuery('SELECT * FROM field WHERE id = ?', array((int)$field_id))->fetch();
+            if (false === $field) {
+                throw new \Exception('Impossible to find field');
+            }
+
+            if (empty($field_value) === true && '1' === $field['required']) {
+                throw new \Exception($field['name'].' is required');
+            }
+
+            $this->db->insert('account_has_field', array(
+                'account_id' => $account_id,
+                'field_id' => $field['id'],
+                'value' => $field['crypt'] === '1' ? $this->security->encrypt($field_value) : $field_value,
+            ));
         }
     }
 }

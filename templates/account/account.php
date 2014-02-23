@@ -20,3 +20,4 @@
             <script type="text/html" id="tpl-manage-accounts-input"><?php include __DIR__.'/inputs_input.php' ?></script>
             <script type="text/html" id="tpl-manage-accounts-textarea"><?php include __DIR__.'/inputs_textarea.php' ?></script>
             <script type="text/html" id="tpl-manage-accounts-show"><?php include __DIR__.'/show.php' ?></script>
+            <script type="text/html" id="tpl-manage-accounts-show-line"><?php include __DIR__.'/show_line.php' ?></script>

@@ -42,6 +42,33 @@ header {
 
 /**************************
  *
+ * Account page
+ *
+ **************************/
+.row-show {
+    font-size: 15px;
+    padding: 0.5em 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.row-show:nth-child(odd) {
+    background-color: #e5e5e5;
+}
+
+.fields .row-show:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.fields .row-show:nth-child(even) {
+    background-color: #e5e5e5;
+}
+
+.row-show div:first-child {
+    font-weight: bold;
+}
+
+/**************************
+ *
  *  Drag and drop fields
  *
  **************************/

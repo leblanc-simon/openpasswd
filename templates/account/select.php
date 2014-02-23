@@ -27,7 +27,7 @@
 
                 <div class="row margin-bottom">
                     <div class="col-md-12">
-                        <form action="<?php echo $this->app['url_generator']->generate('account') ?>" method="post" role="form">
+                        <form action="<?php echo $this->app['url_generator']->generate('account_show', array('slug' => '--slug--')) ?>" method="get" role="form">
                             <fieldset>
                                 <legend data-content="legend-type">Sélectionner un compte</legend>
                                 <div class="form-group col-xs-12">
@@ -35,5 +35,8 @@
                                 </div>
                             </fieldset>
                         </form>
+                    </div>
+
+                    <div class="col-md-12" id="account-details">
                     </div>
                 </div>

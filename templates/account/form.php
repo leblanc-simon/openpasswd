@@ -12,7 +12,7 @@
                         <legend data-content="legend"></legend>
                         <div class="form-group">
                             <label for="account_name">Nom du compte</label>
-                            <input type="text" name="name" id="account_name" class="form-control" data-content="account-name" />
+                            <input type="text" name="name" id="account_name" class="form-control" required="required" data-content="account-name" />
                         </div>
                         <div class="main-form"></div>
                         <div class="form-group">
