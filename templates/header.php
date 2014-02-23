@@ -13,7 +13,7 @@
                 <?php if ($must_be_login === false) { ?>
                 <div class="navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Accueil</a></li>
+                        <li class="active"><a href="#accounts">Comptes</a></li>
                         <li><a href="#users">Utilisateurs</a></li>
                         <li><a href="#groups">Groupes</a></li>
                         <li><a href="#account-types">Types de compte</a></li>

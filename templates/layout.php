@@ -6,6 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <?php if ($must_be_login === false) { ?>
+        <link href="<?php echo $this->request->getBasePath() ?>/css/chosen.min.css" rel="stylesheet" media="screen">
+        <?php } ?>
         <link href="<?php echo $this->request->getBasePath() ?>/css/styles.css" rel="stylesheet" media="screen">
         <link href="<?php echo $this->request->getBasePath() ?>/css/bootstrap-glyphicons.css" rel="stylesheet" media="screen">
     </head>
@@ -48,12 +51,14 @@
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
         <?php if ($must_be_login === false) { ?>
         <script src="<?php echo $this->request->getBasePath() ?>/js/vendor/jquery.loadTemplate-1.2.1.js"></script>
+        <script src="<?php echo $this->request->getBasePath() ?>/js/vendor/chosen.jquery.min.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/functions.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/admin.prototype.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/user.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/group.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/account_type.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/field.js"></script>
+        <script src="<?php echo $this->request->getBasePath() ?>/js/account.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/app.js"></script>
         <?php } ?>
     </body>
