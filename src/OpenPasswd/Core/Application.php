@@ -78,10 +78,6 @@ class Application
             $index = new AppIndex($app);
             return $index->loginAction();
         })->bind('login_path');
-        $app->post('/login-check', function() use ($app) {
-            $index = new AppIndex($app);
-            return $index->loginAction();
-        })->bind('check_path');
 
         // - View account
         $app->get('/accounts/show/{slug}', function($slug) use ($app) {
@@ -191,7 +187,7 @@ class Application
                 ),
                 'secured' => array(
                     'pattern'   => '^.*$',
-                    'form'      => array('login_path' => '/login', 'check_path' => '/login-check'),
+                    'form'      => array('login_path' => '/login', 'check_path' => '/login_check'),
                     'logout'    => array('logout_path' => '/logout'),
                     'users'     => $app->share(function() use ($app) {
                         return new WebserviceUserProvider($app['db']);

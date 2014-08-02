@@ -10,7 +10,7 @@
 ?>
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
-                <form action="<?php echo $this->url('check_path') ?>" method="post">
+                <form action="<?php echo $this->url('login_check') ?>" method="post">
                     <fieldset>
                         <legend><?php echo $this->l10n('main.connect') ?></legend>
                         <div class="form-group">
