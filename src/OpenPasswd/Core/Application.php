@@ -45,10 +45,6 @@ class Application
 
     static public function run()
     {
-        if (self::getConfiguration() === false) {
-            return;
-        }
-
         self::getSilexApplication()['debug'] = Config::get('debug', false);
 
         self::getRouting();
@@ -56,23 +52,6 @@ class Application
         self::getRegisters();
 
         self::$app->run();
-    }
-
-
-    /**
-     * Read and store configuration
-     */
-    static private function getConfiguration()
-    {
-        $configuration_filename = __DIR__.'/../../../config/config.php';
-
-        if (file_exists($configuration_filename) === false) {
-            header('Location: install.php');
-            return false;
-        }
-
-        require_once $configuration_filename;
-        return true;
     }
 
 

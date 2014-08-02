@@ -10,6 +10,8 @@
 
 namespace OpenPasswd\Application;
 
+use OpenPasswd\Core\Config;
+
 class Index extends AbstractApp
 {
     /**
@@ -33,7 +35,7 @@ class Index extends AbstractApp
     private function getTemplate($must_be_login)
     {
         ob_start();
-        include __DIR__.'/../../../templates/layout.php';
+        include Config::get('layout');
         $content = ob_get_contents();
         ob_end_clean();
 

@@ -16,8 +16,8 @@
     "type": "application",
     
     "autoload": {
-        "psr-0": {
-            "OpenPasswd": "lib/"
+        "psr-4": {
+            "OpenPasswd\\": "src/OpenPasswd/"
         }
     },
 
