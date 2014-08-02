@@ -82,10 +82,6 @@ class Application
             $index = new AppIndex($app);
             return $index->loginAction();
         })->bind('check_path');
-        $app->get('/logout', function() use ($app) {
-            $index = new AppIndex($app);
-            return $index->loginAction();
-        })->bind('logout');
 
         // - View account
         $app->get('/accounts/show/{slug}', function($slug) use ($app) {
@@ -194,9 +190,10 @@ class Application
                     'anonymous' => true,
                 ),
                 'secured' => array(
-                    'pattern' => '^.*$',
-                    'form' => array('login_path' => '/login', 'check_path' => '/login-check'),
-                    'users' => $app->share(function() use ($app) {
+                    'pattern'   => '^.*$',
+                    'form'      => array('login_path' => '/login', 'check_path' => '/login-check'),
+                    'logout'    => array('logout_path' => '/logout'),
+                    'users'     => $app->share(function() use ($app) {
                         return new WebserviceUserProvider($app['db']);
                     }),
                 ),
