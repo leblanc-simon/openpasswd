@@ -23,6 +23,14 @@ OpenPasswd\Core\Config::add(array(
         'charset'    => 'utf8',
     ),
 
+    // Locales
+    'locales_dir'       => __DIR__.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'locales',
+    'locales_domain'    => 'messages',
+    'locale'            => 'en',
+
+    // Template
+    'layout'            => __DIR__.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'layout.php',
+
     // Crypt
     'crypt_method'      => 'AES-256-CBC',
     'crypt_password'    => '',
