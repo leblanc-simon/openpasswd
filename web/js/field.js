@@ -1,3 +1,12 @@
+/**
+ * This file is part of the OpenPasswd package.
+ *
+ * (c) Simon Leblanc <contact@leblanc-simon.eu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 function Field()
 {
     this.top_container = $('#manage-fields');
@@ -11,7 +20,7 @@ function Field()
     this.url_get = url_field_get;
 
     this.data_add = {
-        legend: 'Ajouter un nouveau type de champs',
+        legend: language.field.add,
         action: url_field_add,
         name: '',
         description: '',
@@ -27,7 +36,7 @@ function Field()
 
     this.data_update = function(slug, data) {
         return {
-            legend: 'Modifier le type de champs &quot;' + data.name + '&quot;',
+            legend: language.field.edit.replace('%name%', data.name),
             action: url_field_update.replace(/--slug--/, slug),
             name: data.name,
             description: data.description,

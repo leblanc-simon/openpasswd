@@ -1,3 +1,12 @@
+/**
+* This file is part of the OpenPasswd package.
+*
+* (c) Simon Leblanc <contact@leblanc-simon.eu>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
@@ -22,6 +31,9 @@ CREATE  TABLE IF NOT EXISTS `user` (
   UNIQUE INDEX `slug_unique_idx` (`slug` ASC) )
 ENGINE = InnoDB;
 
+INSERT INTO `user` (`id`, `slug`, `username`, `passwd`, `name`, `created_at`, `updated_at`, `last_connection`)
+    VALUES (1, 'admin', 'admin', '$2y$10$KjO6I7QBSG9zIry8b54ZE.FBENGdSYmF9tPLburNW/KGlqeWQy4h2', 'Administrator', NOW(), NOW(), NOW());
+
 
 -- -----------------------------------------------------
 -- Table `group`
@@ -39,6 +51,9 @@ CREATE  TABLE IF NOT EXISTS `group` (
   UNIQUE INDEX `name_unique_idx` (`name` ASC) ,
   UNIQUE INDEX `slug_unique_idx` (`slug` ASC) )
 ENGINE = InnoDB;
+
+INSERT INTO `group` (`id`, `slug`, `name`, `description`, `created_at`, `updated_at`)
+    VALUES (1, 'admin', 'Administrator', NULL, NOW(), NOW());
 
 
 -- -----------------------------------------------------
@@ -63,6 +78,9 @@ CREATE  TABLE IF NOT EXISTS `user_has_group` (
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+INSERT INTO `user_has_group` (`user_id`, `group_id`)
+    VALUES (1, 1);
 
 
 -- -----------------------------------------------------
@@ -147,6 +165,7 @@ CREATE  TABLE IF NOT EXISTS `field` (
 ENGINE = InnoDB;
 
 
+
 -- -----------------------------------------------------
 -- Table `account_type_has_field`
 -- -----------------------------------------------------
@@ -208,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `account_view` (`name` INT, `description` INT, `crypt
 DROP VIEW IF EXISTS `account_view` ;
 DROP TABLE IF EXISTS `account_view`;
 CREATE  OR REPLACE VIEW `account_view` AS
-    SELECT a.`slug` as slug, f.`name` as `name`, f.`description` as `description`, f.`crypt` as `crypt`, f.`type` as `type`, f.`required` as `required`, af.`value` as `value`, ag.`group_id` as `group_id`
+    SELECT f.`name` as `name`, f.`description` as `description`, f.`crypt` as `crypt`, f.`type` as `type`, f.`required` as `required`, af.`value` as `value`, ag.`group_id` as `group_id`
     FROM `account` a
         INNER JOIN `account_has_field` af
             ON a.`id` = af.`account_id`

@@ -1,19 +1,28 @@
-
+<?php
+/**
+ * This file is part of the OpenPasswd package.
+ *
+ * (c) Simon Leblanc <contact@leblanc-simon.eu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+?>
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
-                <form action="<?php echo $this->app['url_generator']->generate('check_path') ?>" method="post">
+                <form action="<?php echo $this->url('check_path') ?>" method="post">
                     <fieldset>
-                        <legend>Connexion à OpenPasswd</legend>
+                        <legend><?php echo $this->l10n('main.connect') ?></legend>
                         <div class="form-group">
-                            <label for="username">Nom d'utilisateur</label>
-                            <input type="text" class="form-control" name="_username" id="username" placeholder="Entrez votre nom d'utilisateur">
+                            <label for="username"><?php echo $this->l10n('main.username') ?></label>
+                            <input type="text" class="form-control" name="_username" id="username" placeholder="<?php echo $this->l10n('main.username_placeholder') ?>">
                         </div>
                         <div class="form-group">
-                            <label for="password">Mot de passe</label>
-                            <input type="password" class="form-control" name="_password" id="password" placeholder="Entrez votre mot de passe">
+                            <label for="password"><?php echo $this->l10n('main.password') ?></label>
+                            <input type="password" class="form-control" name="_password" id="password" placeholder="<?php echo $this->l10n('main.password_placeholder') ?>">
                         </div>
-                        <button type="submit" class="btn btn-success">Se connecter</button>
-                        <button type="reset" class="btn btn-danger">Annuler</button>
+                        <button type="submit" class="btn btn-success"><?php echo $this->l10n('main.login') ?></button>
+                        <button type="reset" class="btn btn-danger"><?php echo $this->l10n('main.cancel') ?></button>
                     </fieldset>
                 </form>
             </div>

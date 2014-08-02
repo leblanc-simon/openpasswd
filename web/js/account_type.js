@@ -1,3 +1,12 @@
+/**
+ * This file is part of the OpenPasswd package.
+ *
+ * (c) Simon Leblanc <contact@leblanc-simon.eu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 function AccountType()
 {
     this.top_container = $('#manage-account-types');
@@ -75,13 +84,13 @@ function AccountType()
     this.afterInsertUpdate = this.activeDnd;
 
     this.data_add = {
-        legend: 'Ajouter un nouveau type de compte',
+        legend: language.account_type.add,
         action: url_account_type_add,
         name: '',
         description: '',
         fields: '',
 
-        'legend-field': 'Liste des champs',
+        'legend-field': language.account_type.fields,
         'enable-fields': '',
         'available-fields': available_fields_for_new
     };
@@ -101,13 +110,13 @@ function AccountType()
         }
 
         return {
-            legend: 'Modifier le type de compte &quot;' + data.name + '&quot;',
+            legend: language.account_type.edit.replace('%name%', data.name),
             action: url_account_type_update.replace(/--slug--/, slug),
             name: data.name,
             description: data.description,
             fields: JSON.stringify(fields),
 
-            'legend-field': 'Liste des champs',
+            'legend-field': language.account_type.fields,
             'enable-fields': enable_fields,
             'available-fields': available_fields
         }

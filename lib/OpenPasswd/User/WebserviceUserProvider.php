@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the OpenPasswd package.
+ *
+ * (c) Simon Leblanc <contact@leblanc-simon.eu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace OpenPasswd\User;
 
@@ -41,7 +49,7 @@ class WebserviceUserProvider implements UserProviderInterface
             throw new UsernameNotFoundException('Username '.$username.' not found');
         }
 
-        $stmt = $this->db->executeQuery('SELECT g.slug
+        $stmt = $this->db->executeQuery('SELECT g.id, g.slug
                     FROM '.$this->db->quoteIdentifier('group').' g
                     INNER JOIN '.$this->db->quoteIdentifier('user_has_group').' ug
                         ON g.id = ug.group_id
@@ -53,7 +61,7 @@ class WebserviceUserProvider implements UserProviderInterface
         $roles = array();
 
         foreach ($tmp_roles as $role) {
-            $roles[] = $role['slug'];
+            $roles[] = new Role($role['id'], $role['slug']);
         }
 
         return new WebserviceUser($user['username'], $user['passwd'], $roles);

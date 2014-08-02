@@ -1,3 +1,12 @@
+/**
+ * This file is part of the OpenPasswd package.
+ *
+ * (c) Simon Leblanc <contact@leblanc-simon.eu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 function Group()
 {
     this.top_container = $('#manage-groups');
@@ -11,7 +20,7 @@ function Group()
     this.url_get = url_group_get;
 
     this.data_add = {
-        legend: 'Ajouter un nouveau groupe',
+        legend: language.group.add,
         action: url_group_add,
         name: '',
         description: ''
@@ -19,7 +28,7 @@ function Group()
 
     this.data_update = function(slug, data) {
         return {
-            legend: 'Modifier le groupe &quot;' + data.name + '&quot;',
+            legend: language.group.edit.replace('%name%', data.name),
             action: url_group_update.replace(/--slug--/, slug),
             name: data.name,
             description: data.description

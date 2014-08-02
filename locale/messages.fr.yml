@@ -1,0 +1,72 @@
+edit: Modifier
+save: Enregistrer
+cancel: Annuler
+name: OpenPasswd
+
+main.logout: Déconnexion
+main.connect: Connexion à OpenPasswd
+main.username: Nom d'utilisateur
+main.username_placeholder: Entrez votre nom d'utilisateur
+main.password: Mot de passe
+main.password_placeholder: Entrez votre mot de passe
+main.login: Se connecter
+main.cancel: Annuler
+
+account.accounts: Comptes
+account.add: Ajouter un nouveau compte
+account.search: Rechercher
+account.select: Sélectionner un compte
+account.select_type: Sélectionner le type de compte à ajouter
+account.type: Type de compte
+account.name: Nom du compte
+account.description: Commentaires
+
+user.users: Utilisateurs
+user.list: Liste des utilisateurs
+user.add: Ajouter un nouvel utilisateur
+user.edit: Modifier l'utilisateur &quot;%name%&quot;
+user.name: Nom
+user.login: Identifiant
+user.password: Mot de passe
+user.groups: Liste des groupes
+user.group_actives: Actifs
+user.group_availables: Disponibles
+user.saved: L'utilisateur a été enregistré
+
+group.groups: Groupes
+group.list: Liste des groupes
+group.add: Ajouter un nouveau groupe
+group.edit: Modifier le groupe &quot;%name%&quot;
+group.name: Nom
+group.description: Description
+group.saved: Le groupe a été enregistré
+
+account_type.account_types: Types de compte
+account_type.list: Liste des types de compte
+account_type.add: Ajouter un nouveau type de compte
+account_type.edit: Modifier le type de compte &quot;%name%&quot;
+account_type.name: Nom
+account_type.description: Description
+account_type.fields: Liste des champs
+account_type.field_actives: Actifs
+account_type.field_availables: Disponibles
+account_type.saved: Le type de compte a été enregistré
+
+field.fields: Champs
+field.list: Liste des types de champs
+field.add: Ajouter un nouveau type de champs
+field.edit: Modifier le type de champs &quot;%name%&quot;
+field.name: Nom
+field.description: Description
+field.crypt: Chiffrer le champ en base de données
+field.required: Requis
+field.type: Type de champs
+field.text: Texte
+field.long_text: Texte long
+field.date: Date
+field.number: Nombre
+field.email: Adresse e-mail
+field.url: URL
+field.saved: Le champs a été enregistré
+
+error.submit_form: Une erreur s'est produite vous empêchant de soumettre le formulaire

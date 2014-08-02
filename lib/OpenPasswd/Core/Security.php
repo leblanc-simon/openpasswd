@@ -1,31 +1,77 @@
 <?php
+/**
+ * This file is part of the OpenPasswd package.
+ *
+ * (c) Simon Leblanc <contact@leblanc-simon.eu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace OpenPasswd\Core;
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use OpenPasswd\User\WebserviceUser;
+use Silex\Application;
 
 class Security
 {
+    /**
+     * @var Application
+     */
+    private $app;
+
     /**
      * @var UserInterface
      */
     private $user;
 
-    public function __construct(UserInterface $user)
+    public function __construct(Application $app, WebserviceUser $user)
     {
+        $this->app = $app;
         $this->user = $user;
     }
 
 
     public function getEnableGroups()
     {
+        $role_ids = array();
 
+        foreach ($this->user->getRoles() as $role) {
+            $role_ids[] = $role->getId();
+        }
+
+        return $role_ids;
     }
 
 
     public function isAllowedToShowParameters()
     {
+        foreach ($this->user->getRoles() as $role) {
+            if ('admin' === $role->getRole()) {
+                return true;
+            }
+        }
 
+        return false;
+    }
+
+
+    public function isAllowedToShowAccount($account_id)
+    {
+        $groups = $this->getEnableGroups();
+
+        $count = $this->app['db']->executeQuery('SELECT COUNT(*) as nb
+                                                 FROM account_has_group
+                                                 WHERE account_id = ?
+                                                    AND
+                                                    group_id IN ('.implode(', ', array_fill(0, count($groups), '?')).')'
+                                                , array_merge(
+                                                    array($account_id),
+                                                    $groups
+                                                ))
+                                 ->fetch();
+
+        return (bool)$count['nb'];
     }
 
 

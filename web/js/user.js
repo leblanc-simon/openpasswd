@@ -1,3 +1,12 @@
+/**
+ * This file is part of the OpenPasswd package.
+ *
+ * (c) Simon Leblanc <contact@leblanc-simon.eu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 function User()
 {
     this.top_container = $('#manage-users');
@@ -75,13 +84,13 @@ function User()
     this.afterInsertUpdate = this.activeDnd;
 
     this.data_add = {
-        legend: 'Ajouter un nouvel utilisateur',
+        legend: language.user.add,
         action: url_user_add,
         name: '',
         username: '',
         groups: '',
 
-        'legend-group': 'Liste des groupes',
+        'legend-group': language.user.groups,
         'enable-groups': '',
         'available-groups': available_groups_for_new
     };
@@ -101,13 +110,13 @@ function User()
         }
 
         return {
-            legend: 'Modifier l\'utilisateur &quot;' + data.name + '&quot;',
+            legend: language.user.edit.replace('%name%', data.name),
             action: url_user_update.replace(/--slug--/, slug),
             name: data.name,
             username: data.username,
             groups: JSON.stringify(groups),
 
-            'legend-group': 'Liste des groupes',
+            'legend-group': language.user.groups,
             'enable-groups': enable_groups,
             'available-groups': available_groups
         }

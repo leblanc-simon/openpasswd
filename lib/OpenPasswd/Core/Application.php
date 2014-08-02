@@ -13,6 +13,14 @@ namespace OpenPasswd\Core;
 use OpenPasswd\Application\Account;
 use OpenPasswd\Application\Index as AppIndex;
 use OpenPasswd\User\WebserviceUserProvider;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Silex\Provider\DoctrineServiceProvider;
+use Silex\Provider\SessionServiceProvider;
+use Silex\Provider\SecurityServiceProvider;
+use Silex\Provider\UrlGeneratorServiceProvider;
+use Silex\Provider\TranslationServiceProvider;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
 
 /**
  * Application class
@@ -159,9 +167,9 @@ class Application
         })->bind($default_route_name.'_delete');
 
         // Check the user is login
-        $$controller->before(function (\Symfony\Component\HttpFoundation\Request $request) {
+        $$controller->before(function (Request $request) {
             if (false) {
-                return new \Symfony\Component\HttpFoundation\Response(null, 403);
+                return new Response(null, 403);
             }
         }, \Silex\Application::EARLY_EVENT);
 
@@ -177,6 +185,7 @@ class Application
         self::registerDoctrine();
         self::registerSecurity();
         self::registerUrl();
+        self::registerTranslation();
     }
 
 
@@ -185,7 +194,7 @@ class Application
      */
     static private function registerDoctrine()
     {
-        self::getSilexApplication()->register(new \Silex\Provider\DoctrineServiceProvider(), array(
+        self::getSilexApplication()->register(new DoctrineServiceProvider(), array(
             'db.options' => Config::get('doctrine-configuration'),
         ));
     }
@@ -198,8 +207,8 @@ class Application
     {
         $app = self::getSilexApplication();
 
-        $app->register(new \Silex\Provider\SessionServiceProvider());
-        $app->register(new \Silex\Provider\SecurityServiceProvider(), array(
+        $app->register(new SessionServiceProvider());
+        $app->register(new SecurityServiceProvider(), array(
             'security.firewalls' => array(
                 'login' => array(
                     'pattern'   => '^/login$',
@@ -226,7 +235,40 @@ class Application
      */
     static private function registerUrl()
     {
-        self::getSilexApplication()->register(new \Silex\Provider\UrlGeneratorServiceProvider());
+        self::getSilexApplication()->register(new UrlGeneratorServiceProvider());
+    }
+
+
+    /**
+     * Register the translation provider
+     */
+    static private function registerTranslation()
+    {
+        $app = self::getSilexApplication();
+
+        $app->register(new TranslationServiceProvider(), array(
+            'locale_fallbacks' => array('en'),
+        ));
+
+        $app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
+            $translator->addLoader('yaml', new YamlFileLoader());
+
+            $dir = new \DirectoryIterator(Config::get('locales_dir'));
+
+            foreach ($dir as $file) {
+                if (preg_match(
+                        '/^'.Config::get('locales_domain', 'messages').'\.([a-z_A-Z]+)\.yml$/',
+                        $file->getFilename(),
+                        $matches) === 1
+                ) {
+                    $translator->addResource('yaml', $file->getPathname(), $matches[1]);
+                }
+            }
+
+            return $translator;
+        }));
+
+        $app['translator']->setLocale(Config::get('locale'));
     }
 
 

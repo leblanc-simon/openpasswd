@@ -16,6 +16,7 @@ use OpenPasswd\Core\ErrorResponse;
 use OpenPasswd\Core\Config;
 use OpenPasswd\Core\Utils;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 abstract class AbstractApp
 {
@@ -49,7 +50,9 @@ abstract class AbstractApp
         if (null !== $token) {
             $this->user = $token->getUser();
             if ($this->user instanceof UserInterface) {
-                $this->security = new Security($this->user);
+                $this->security = new Security($this->app, $this->user);
+
+
             }
         }
     }
@@ -140,5 +143,32 @@ abstract class AbstractApp
     {
         $sql = 'SELECT '.$this->fields.' FROM '.$this->db->quoteIdentifier($this->table).($this->criteria ?: ' WHERE 1=1').' AND slug = ?';
         return $this->db->fetchAssoc($sql, array_merge($this->criteria_values, array($slug)));
+    }
+
+
+    /**
+     * Translate a term
+     *
+     * @param   string  $id             The term to translate
+     * @param   array   $parameters     The parameter for the translate
+     * @param   null    $domain         The domain of the translation (null = current domain)
+     * @param   null    $locale         The locale to use (null = current locale)
+     * @return  string                  The term translated
+     */
+    public function l10n($id, array $parameters = array(), $domain = null, $locale = null)
+    {
+        return $this->app['translator']->trans($id, $parameters, $domain, $locale);
+    }
+
+
+    /**
+     * @param   string  $name
+     * @param   array   $parameters
+     * @param   bool    $reference_type
+     * @return  mixed
+     */
+    public function url($name, $parameters = array(), $reference_type = UrlGenerator::ABSOLUTE_PATH)
+    {
+        return $this->app['url_generator']->generate($name, $parameters, $reference_type);
     }
 }

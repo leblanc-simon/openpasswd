@@ -1,11 +1,20 @@
-
-                <div class="title">Liste des groupes</div>
+<?php
+/**
+ * This file is part of the OpenPasswd package.
+ *
+ * (c) Simon Leblanc <contact@leblanc-simon.eu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+?>
+                <div class="title"><?php echo $this->l10n('group.list') ?></div>
 
                 <div class="row margin-bottom">
                     <div class="col-md-12">
                         <button class="btn btn-primary new">
                             <span class="glyphicon glyphicon-plus"></span>
-                            Ajouter un nouveau groupe
+                            <?php echo $this->l10n('group.add') ?>
                         </button>
                     </div>
                 </div>
@@ -13,9 +22,9 @@
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th>Nom</th>
-                            <th>Description</th>
-                            <th>Modifier</th>
+                            <th><?php echo $this->l10n('group.name') ?></th>
+                            <th><?php echo $this->l10n('group.description') ?></th>
+                            <th><?php echo $this->l10n('edit') ?></th>
                         </tr>
                     <thead>
                     <tbody>

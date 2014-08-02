@@ -1,0 +1,72 @@
+edit: Edit
+save: Save
+cancel: Cancel
+name: OpenPasswd
+
+main.logout: Logout
+main.connect: Connect to OpenPasswd
+main.username: Username
+main.username_placeholder: Enter your username
+main.password: Password
+main.password_placeholder: Enter your password
+main.login: Login
+main.cancel: Cancel
+
+account.accounts: Accounts
+account.add: Add a new account
+account.search: Search
+account.select: Select an account
+account.select_type: Select the account type to add
+account.type: Account type
+account.name: Account name
+account.description: Comments
+
+user.users: Users
+user.list: List of users
+user.add: Add a new user
+user.edit: Edit user &quot;%name%&quot;
+user.name: Name
+user.login: Username
+user.password: Password
+user.groups: List of groups
+user.group_actives: Actives
+user.group_availables: Availables
+user.saved: The user is saved
+
+group.groups: Groups
+group.list: List of groups
+group.add: Add a new group
+group.edit: Edit group &quot;%name%&quot;
+group.name: Name
+group.description: Description
+group.saved: The group is saved
+
+account_type.account_types: Account types
+account_type.list: List of account types
+account_type.add: Add a new account type
+account_type.edit: Edit account type &quot;%name%&quot;
+account_type.name: Name
+account_type.description: Description
+account_type.fields: List of fields
+account_type.field_actives: Actives
+account_type.field_availables: Availables
+account_type.saved: The account type is saved
+
+field.fields: Fields
+field.list: List of fields
+field.add: Add a new field
+field.edit: Edit field &quot;%name%&quot;
+field.name: Name
+field.description: Description
+field.crypt: Crypt the field in the database
+field.required: Required
+field.type: Field type
+field.text: Text
+field.long_text: Long text
+field.date: Date
+field.number: Number
+field.email: Email
+field.url: URL
+field.saved: The field is saved
+
+error.submit_form: An error occured preventing you from submitting the form

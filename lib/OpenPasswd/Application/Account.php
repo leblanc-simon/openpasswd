@@ -10,9 +10,7 @@
 
 namespace OpenPasswd\Application;
 
-use OpenPasswd\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use OpenPasswd\Core\ErrorResponse;
 
 class Account extends AbstractApp implements IApplication
@@ -24,8 +22,13 @@ class Account extends AbstractApp implements IApplication
         $this->table            = 'account';
         $this->fields           = 'id, slug, name, description, account_type_id';
         $this->order            = 'name ASC';
-        $this->criteria         = null;
-        $this->criteria_values  = array();
+
+        $groups = $this->security->getEnableGroups();
+        $this->criteria         = ' INNER JOIN
+                                        account_has_group
+                                    ON account.id = account_has_group.account_id
+                                    WHERE account_has_group.group_id IN ('.implode(', ', array_fill(0, count($groups), '?')).')';
+        $this->criteria_values  = $groups;
         $this->search           = array('name');
     }
 
@@ -63,9 +66,14 @@ class Account extends AbstractApp implements IApplication
             return new ErrorResponse('Impossible to find object '.$slug, 404);
         }
 
+        if ($this->security->isAllowedToShowAccount($object['id']) === false) {
+            return new ErrorResponse(null, 403);
+        }
+
         $object['description'] = nl2br($object['description']);
 
-        $groups = array(6, 7);
+        $groups = $this->security->getEnableGroups();
+
         $sql = 'SELECT DISTINCT name, description, crypt, type, value
                 FROM '.$this->db->quoteIdentifier('account_view').'
                 WHERE slug = ? AND group_id IN ('.implode(', ', array_fill(0, count($groups), '?')).')';
@@ -159,6 +167,11 @@ class Account extends AbstractApp implements IApplication
     }
 
 
+    /**
+     * @param   int $account_id
+     * @throws  \Exception
+     * @TODO    parse field with the account and not the user's datas
+     */
     private function insertFields($account_id)
     {
         $fields = $this->request->get('field');

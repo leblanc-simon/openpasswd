@@ -1,3 +1,12 @@
+/**
+* This file is part of the OpenPasswd package.
+*
+* (c) Simon Leblanc <contact@leblanc-simon.eu>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 function Account()
 {
     this.top_container = $('#manage-accounts');
@@ -17,13 +26,12 @@ function Account()
     };
 
     this.data_add = {
-        legend: 'Ajouter un nouveau compte',
+        legend: language.account.add,
         action: url_account_add,
         name: '',
         description: '',
         fields: '',
-
-        'account-types': 'Liste des champs'
+        'account-types': ''
     };
 
     this.list = function() {

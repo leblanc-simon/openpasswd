@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>OpenPasswd</title>
+        <title><?php echo $this->l10n('name') ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -11,6 +11,16 @@
         <?php } ?>
         <link href="<?php echo $this->request->getBasePath() ?>/css/styles.css" rel="stylesheet" media="screen">
         <link href="<?php echo $this->request->getBasePath() ?>/css/bootstrap-glyphicons.css" rel="stylesheet" media="screen">
+        <!--
+        /**
+         * This file is part of the OpenPasswd package.
+         *
+         * (c) Simon Leblanc <contact@leblanc-simon.eu>
+         *
+         * For the full copyright and license information, please view the LICENSE
+         * file that was distributed with this source code.
+         */
+        -->
     </head>
     <body>
         <?php include __DIR__.'/header.php' ?>
@@ -49,6 +59,7 @@
         <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <?php include __DIR__.'/lang.js.php'; ?>
         <?php if ($must_be_login === false) { ?>
         <script src="<?php echo $this->request->getBasePath() ?>/js/vendor/jquery.loadTemplate-1.2.1.js"></script>
         <script src="<?php echo $this->request->getBasePath() ?>/js/vendor/chosen.jquery.min.js"></script>
