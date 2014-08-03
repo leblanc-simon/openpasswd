@@ -22,6 +22,9 @@
     },
 
     "require": {
+        "php": ">=5.4",
+        "ext-openssl": "*",
+
         "silex/silex": "1.*",
 
         "symfony/security": "~2.3",
