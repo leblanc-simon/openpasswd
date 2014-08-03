@@ -10,7 +10,7 @@
 
 namespace OpenPasswd\Provider;
 
-use OpenPasswd\Core\PasswordEncoder;
+use OpenPasswd\Security\Encoder\PasswordEncoder;
 use OpenPasswd\User\WebserviceUserProvider;
 use Silex\Provider\SecurityServiceProvider;
 use Silex\Provider\SessionServiceProvider;

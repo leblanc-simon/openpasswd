@@ -10,13 +10,14 @@
 
 namespace OpenPasswd\Application;
 
-use OpenPasswd\Core\Security;
+use OpenPasswd\Security\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use OpenPasswd\Core\ErrorResponse;
 use OpenPasswd\Core\Config;
 use OpenPasswd\Core\Utils;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractApp
 {
@@ -44,7 +45,7 @@ abstract class AbstractApp
         $this->app          = $app;
         $this->db           = $app['db'];
         $this->request      = $app['request'];
-        $this->response     = new \Symfony\Component\HttpFoundation\Response();
+        $this->response     = new Response();
 
         $token = $app['security']->getToken();
         if (null !== $token) {

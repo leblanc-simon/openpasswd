@@ -8,9 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace OpenPasswd\Core;
+namespace OpenPasswd\Security;
 
-use OpenPasswd\User\WebserviceUser;
+use OpenPasswd\Core\Config;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Silex\Application;
 
 class Security
@@ -25,7 +26,7 @@ class Security
      */
     private $user;
 
-    public function __construct(Application $app, WebserviceUser $user)
+    public function __construct(Application $app, UserInterface $user)
     {
         $this->app = $app;
         $this->user = $user;

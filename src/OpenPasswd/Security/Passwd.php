@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace OpenPasswd\Core;
+namespace OpenPasswd\Security;
 
 /**
  * A Compatibility library with PHP 5.5's simplified password hashing API.

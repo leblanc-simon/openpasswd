@@ -8,8 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace OpenPasswd\Core;
+namespace OpenPasswd\Security\Encoder;
 
+use OpenPasswd\Security\Security;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 class PasswordEncoder implements PasswordEncoderInterface
