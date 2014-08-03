@@ -223,7 +223,7 @@ class Passwd
      */
     static public function password_needs_rehash($hash, $algo, array $options = array())
     {
-        $info = password_get_info($hash);
+        $info = self::password_get_info($hash);
         if ($info['algo'] != $algo) {
             return true;
         }
