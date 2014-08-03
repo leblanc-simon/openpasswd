@@ -10,8 +10,8 @@
 
 namespace OpenPasswd\Core;
 
-use OpenPasswd\Application\Account;
-use OpenPasswd\Application\Index as AppIndex;
+use OpenPasswd\Routing\Module;
+use OpenPasswd\Routing\Specific;
 use OpenPasswd\User\WebserviceUserProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,88 +63,18 @@ class Application
         $app = self::getSilexApplication();
 
         foreach (self::$available_modules as $class => $route) {
-            self::getRoutingForModule($app, $class, $route);
+            $module_routing = new Module();
+            $module_routing
+                ->setApp($app)
+                ->setModule($class)
+                ->setPrefixRoute($route)
+                ->generateRouting();
         }
 
-        // Specifics routes
-        // - Homepage
-        $app->get('/', function() use ($app) {
-            $index = new AppIndex($app);
-            return $index->defaultAction();
-        })->bind('homepage');
-
-        // - Login / Logout
-        $app->get('/login', function() use ($app) {
-            $index = new AppIndex($app);
-            return $index->loginAction();
-        })->bind('login_path');
-
-        // - View account
-        $app->get('/accounts/show/{slug}', function($slug) use ($app) {
-            $account = new Account($app);
-
-            return $account->showAction($slug);
-        })->bind('account_show');
-    }
-
-
-    static private function getRoutingForModule($app, $class, $route)
-    {
-        $default_route_name = strtolower($class);
-        $class = '\\OpenPasswd\\Application\\'.$class;
-        $controller = $default_route_name;
-        $$controller = $app['controllers_factory'];
-
-        // List all object
-        $$controller->get('/', function() use ($app, $class) {
-            $object = new $class($app);
-
-            return $object->listAction();
-        })->bind($default_route_name);
-
-        // Get item
-        $$controller->get('/{slug}', function($slug) use ($app, $class) {
-            $object = new $class($app);
-
-            return $object->getAction($slug);
-        })->bind($default_route_name.'_get');
-
-        // Search
-        $$controller->get('/search/{search}', function($search) use ($app, $class) {
-            $object = new $class($app);
-
-            return $object->searchAction($search);
-        })->bind($default_route_name.'_search');
-
-        // Save new item
-        $$controller->post('/', function() use ($app, $class) {
-            $object = new $class($app);
-
-            return $object->saveAction();
-        })->bind($default_route_name.'_add');
-
-        // Save item
-        $$controller->post('/{slug}', function($slug) use ($app, $class) {
-            $object = new $class($app);
-
-            return $object->saveAction($slug);
-        })->bind($default_route_name.'_update');
-
-        // Delete item
-        $$controller->delete('/{slug}', function($slug) use ($app, $class) {
-            $object = new $class($app);
-
-            return $object->deleteAction($slug);
-        })->bind($default_route_name.'_delete');
-
-        // Check the user is login
-        $$controller->before(function (Request $request) {
-            if (false) {
-                return new Response(null, 403);
-            }
-        }, \Silex\Application::EARLY_EVENT);
-
-        $app->mount($route, $$controller);
+        $specific_routing = new Specific();
+        $specific_routing
+            ->setApp($app)
+            ->generateRouting();
     }
 
 
