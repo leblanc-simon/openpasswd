@@ -55,8 +55,8 @@
         </div>
 
         <!-- JavaScript plugins (requires jQuery) -->
-        <script src="http://code.jquery.com/jquery.js"></script>
-        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <script src="//code.jquery.com/jquery.js"></script>
+        <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
         <?php include __DIR__.'/lang.js.php'; ?>
