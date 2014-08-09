@@ -26,7 +26,7 @@ use Symfony\Component\Translation\Loader\YamlFileLoader;
  */
 class Translation
     extends AProvider
-    implements IProvider
+    implements ProviderInterface
 {
     /**
      * Register the provider into the Silex Application

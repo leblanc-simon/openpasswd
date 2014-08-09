@@ -26,7 +26,7 @@ use Silex\Provider\SessionServiceProvider;
  */
 class Security
     extends AProvider
-    implements IProvider
+    implements ProviderInterface
 {
     /**
      * Register the provider into the Silex Application

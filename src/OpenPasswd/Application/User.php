@@ -14,7 +14,7 @@ use OpenPasswd\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use OpenPasswd\Core\ErrorResponse;
 
-class User extends AbstractApp implements IApplication
+class User extends AbstractApp implements ApplicationInterface
 {
     public function __construct(\Silex\Application $app)
     {

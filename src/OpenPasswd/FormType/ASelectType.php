@@ -10,7 +10,7 @@
 
 namespace OpenPasswd\FormType;
 
-abstract class ASelectType implements IFormType
+abstract class ASelectType implements FormTypeInterface
 {
     /**
      * @return string   The name of the form type (use in database for field)

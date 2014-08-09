@@ -10,7 +10,7 @@
 
 namespace OpenPasswd\FormType;
 
-interface IFormType
+interface FormTypeInterface
 {
     /**
      * @return string   The name of the form type (use in database for field)
