@@ -12,6 +12,7 @@ namespace OpenPasswd\Provider;
 
 use OpenPasswd\Core\Config;
 use Silex\Provider\TranslationServiceProvider;
+use Silex\Translator;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 
 
@@ -49,7 +50,7 @@ class Translation
         $this->app['translator'] = $this->app->share(
             $this->app->extend(
                 'translator',
-                function($translator) {
+                function(Translator $translator) {
                     $translator->addLoader('yaml', new YamlFileLoader());
 
                     $dir = new \DirectoryIterator(Config::get('locales_dir'));
