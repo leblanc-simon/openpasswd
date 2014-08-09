@@ -25,30 +25,32 @@ function Field()
         name: '',
         description: '',
         crypt: '',
-        required: '',
-        type_text: 'checked',
-        type_textarea: '',
-        type_date: '',
-        type_numeric: '',
-        type_email: '',
-        type_url: ''
+        required: ''
     };
 
+    var nb_types = form_types.names.length;
+    var checked = 'checked';
+    for (var i = 0; i < nb_types; i++) {
+        this.data_add['type_' + form_types.names[i]] = checked;
+        checked = '';
+    }
+
     this.data_update = function(slug, data) {
-        return {
+        var datas = {
             legend: language.field.edit.replace('%name%', data.name),
             action: url_field_update.replace(/--slug--/, slug),
             name: data.name,
             description: data.description,
             crypt: data.crypt == 1 ? 'checked' : '',
-            required: data.required == 1 ? 'checked' : '',
-            type_text: data.type === 'text' ? 'checked' : '',
-            type_textarea: data.type === 'textarea' ? 'checked' : '',
-            type_date: data.type === 'date' ? 'checked' : '',
-            type_numeric: data.type === 'numeric' ? 'checked' : '',
-            type_email: data.type === 'email' ? 'checked' : '',
-            type_url: data.type === 'url' ? 'checked' : ''
+            required: data.required == 1 ? 'checked' : ''
         }
+
+        var nb_types = form_types.names.length;
+        for (var i = 0; i < nb_types; i++) {
+            datas['type_' + form_types.names[i]] = data.type === form_types.names[i] ? 'checked' : '';
+        }
+
+        return datas;
     }
 }
 

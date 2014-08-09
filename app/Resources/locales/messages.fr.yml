@@ -62,9 +62,9 @@ field.crypt: Chiffrer le champ en base de données
 field.required: Requis
 field.type: Type de champs
 field.text: Texte
-field.long_text: Texte long
+field.textarea: Texte long
 field.date: Date
-field.number: Nombre
+field.numeric: Nombre
 field.email: Adresse e-mail
 field.url: URL
 field.saved: Le champs a été enregistré

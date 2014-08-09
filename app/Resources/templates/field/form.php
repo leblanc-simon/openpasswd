@@ -33,42 +33,14 @@
                         </div>
                         <div class="form-group">
                             <label><?php echo $this->l10n('field.type') ?></label>
+                            <?php foreach ($this->getFormTypes()->getAllNames() as $form_type_name) { ?>
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="type" value="text" data-checked="type_text" />
-                                    <?php echo $this->l10n('field.text') ?>
+                                    <input type="radio" name="type" value="<?php echo $form_type_name ?>" data-checked="type_<?php echo $form_type_name ?>" />
+                                    <?php echo $this->l10n('field.'.$form_type_name) ?>
                                 </label>
                             </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="type" value="textarea" data-checked="type_textarea" />
-                                    <?php echo $this->l10n('field.long_text') ?>
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="type" value="date" data-checked="type_date" />
-                                    <?php echo $this->l10n('field.date') ?>
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="type" value="numeric" data-checked="type_numeric" />
-                                    <?php echo $this->l10n('field.number') ?>
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="type" value="email" data-checked="type_email" />
-                                    <?php echo $this->l10n('field.email') ?>
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="type" value="url" data-checked="type_url" />
-                                    <?php echo $this->l10n('field.url') ?>
-                                </label>
-                            </div>
+                            <?php } ?>
                         </div>
                         <button type="submit" class="btn btn-success">
                             <span class="glyphicon glyphicon-ok"></span>
