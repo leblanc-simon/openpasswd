@@ -16,8 +16,10 @@ composer install
 cp app/config.php.template app/config.php
 ```
 
-* Edit the ```app/config.php``` to indicate the database connection.
+* Edit the ```app/config.php``` to indicate the database connection and password
 * Initialize the database with ```app/Resources/db/openpasswd.sql```
+
+You can read [an example of configuration with Apache](https://github.com/leblanc-simon/openpasswd/wiki/SSL-:-Example-of-the-installation-with-Apache)
 
 Thanks to
 ---------

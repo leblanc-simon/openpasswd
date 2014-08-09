@@ -35,4 +35,6 @@ OpenPasswd\Core\Config::add(array(
     'crypt_method'      => 'AES-256-CBC',
     'crypt_password'    => '',
     'crypt_iv'          => '',
+    'master_password'   => '',
+    'certificate_oid'   => '1.2.3.4',
 ));
