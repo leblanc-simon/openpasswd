@@ -157,7 +157,7 @@ CREATE  TABLE IF NOT EXISTS `field` (
   `name` VARCHAR(45) NOT NULL ,
   `description` TEXT NULL ,
   `crypt` TINYINT(1) NOT NULL DEFAULT 0 ,
-  `type` ENUM('text','textarea','date','numeric','email','url') NOT NULL ,
+  `type` VARCHAR(45) NOT NULL ,
   `required` TINYINT(1) NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `name_unique_idx` (`name` ASC) ,

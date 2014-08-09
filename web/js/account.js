@@ -132,18 +132,15 @@ function Account()
                 var form_content = '';
 
                 $.each(data.enable_fields, function(i, item) {
-                    var template = $('#tpl-manage-accounts-input');
-
-                    if (item.type === 'textarea') {
-                        template = $('#tpl-manage-accounts-textarea');
-                    }
+                    var template = $('#' + form_types.templates[item.type]);
 
                     var datas_form = {
                         type: item.type,
                         name: item.name,
                         input_id: 'field[' + item.id + ']',
                         description: item.description,
-                        required: item.required ? 'required' : ''
+                        required: item.required ? 'required' : '',
+                        available_values: form_types.available_values[item.type]
                     }
 
                     tmpDiv.loadTemplate(
