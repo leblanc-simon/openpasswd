@@ -62,6 +62,7 @@ function Account()
                                     complete: function() {
                                         that.unWait();
                                         that.container.find('select[name=search]').chosen();
+                                        that.container.find('select[name=search]').trigger('chosen:activate');
                                     }
                                 }
                             );
