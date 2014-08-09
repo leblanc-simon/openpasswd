@@ -12,7 +12,6 @@ namespace OpenPasswd\Application;
 
 use OpenPasswd\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use OpenPasswd\Core\ErrorResponse;
 
 class User extends AbstractApp implements IApplication
