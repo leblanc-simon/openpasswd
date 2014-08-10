@@ -12,7 +12,7 @@ namespace OpenPasswd\Provider;
 
 use Silex\Application;
 
-interface IProvider
+interface ProviderInterface
 {
     /**
      * Setup the Silex Application

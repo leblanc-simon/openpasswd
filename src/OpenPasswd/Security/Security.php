@@ -157,21 +157,11 @@ class Security
      */
     static public function hash($password)
     {
-        if (version_compare(PHP_VERSION, '5.3.7', '<')) {
-            return Passwd::password_hash($password, Passwd::PASSWORD_SHA512);
-        } elseif (version_compare(PHP_VERSION, '5.5.0', '<')) {
-            return Passwd::password_hash($password, Passwd::PASSWORD_BCRYPT);
-        } else {
-            return password_hash($password, PASSWORD_BCRYPT);
-        }
+        return password_hash($password, PASSWORD_BCRYPT);
     }
 
     static public function verify($password, $hash)
     {
-        if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-            return Passwd::password_verify($password, $hash);
-        } else {
-            return password_verify($password, $hash);
-        }
+        return password_verify($password, $hash);
     }
 }

@@ -24,7 +24,7 @@ use Silex\Provider\DoctrineServiceProvider;
  */
 class Doctrine
     extends AProvider
-    implements IProvider
+    implements ProviderInterface
 {
     /**
      * Register the provider into the Silex Application

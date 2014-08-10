@@ -23,7 +23,7 @@ class Collection
     }
 
 
-    public function add(IFormType $form_type)
+    public function add(FormTypeInterface $form_type)
     {
         $this->form_types[$form_type->getName()] = $form_type;
     }
@@ -47,7 +47,7 @@ class Collection
 
 
     /**
-     * @return Collection[]
+     * @return FormTypeInterface[]
      */
     public function getAll()
     {
@@ -72,7 +72,7 @@ class Collection
 
     /**
      * @param $name
-     * @return IFormType
+     * @return FormTypeInterface
      */
     public function get($name)
     {
