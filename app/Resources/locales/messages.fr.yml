@@ -71,4 +71,4 @@ field.url: URL
 field.saved: Le champs a été enregistré
 
 error.submit_form: Une erreur s'est produite vous empêchant de soumettre le formulaire
-error.nb_min_group: Vous devez choisir au minimum un groupe dont vous faites partie
+error.nb_min_group: Vous devez choisir au moins un groupe dont vous faites partie
