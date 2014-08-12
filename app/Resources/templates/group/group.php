@@ -25,4 +25,3 @@
             <script type="text/html" id="tpl-manage-groups-edit"><?php include __DIR__.'/form.php' ?></script>
             <script type="text/html" id="tpl-manage-groups-list"><?php include __DIR__.'/table.php' ?></script>
             <script type="text/html" id="tpl-manage-groups-line"><?php include __DIR__.'/line.php' ?></script>
-            <script type="text/html" id="tpl-manage-groups-checkbox"><?php include __DIR__.'/checkbox.php' ?></script>

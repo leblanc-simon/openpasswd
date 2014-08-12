@@ -33,4 +33,5 @@
             <script type="text/html" id="tpl-manage-accounts-line"><?php include __DIR__.'/option.php' ?></script>
             <script type="text/html" id="tpl-manage-accounts-show"><?php include __DIR__.'/show.php' ?></script>
             <script type="text/html" id="tpl-manage-accounts-show-line"><?php include __DIR__.'/show_line.php' ?></script>
+            <script type="text/html" id="tpl-manage-groups-checkbox"><?php include __DIR__ . '/checkbox.php' ?></script>
             <?php echo $this->getFormTypes()->render() ?>

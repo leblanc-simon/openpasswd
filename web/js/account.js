@@ -17,9 +17,7 @@ function Account()
     this.tpl_admin_line = $('#tpl-manage-accounts-line');
     this.tpl_show_account = $('#tpl-manage-accounts-show');
     this.tpl_show_line = $('#tpl-manage-accounts-show-line');
-
     this.tpl_group_list = $('#tpl-manage-groups-list');
-    console.log(this.tpl_group_list);
 
     this.url_list = url_account_list;
     this.url_get = url_account_get;
