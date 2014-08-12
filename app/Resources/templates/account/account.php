@@ -22,6 +22,7 @@
                 var url_account_add       = '<?php echo $this->url('account_add') ?>';
                 var url_account_update    = '<?php echo $this->url('account_update', array('slug' => '--slug--')) ?>';
                 var url_account_show      = '<?php echo $this->url('account_show', array('slug' => '--slug--')) ?>';
+                var security              = <?php echo json_encode($this->getSecurity()->getEnableGroups()) ?>;
             </script>
             <script type="text/html" id="tpl-manage-accounts-edit"><?php include __DIR__.'/form.php' ?></script>
             <script type="text/html" id="tpl-manage-accounts-list"><?php include __DIR__.'/select.php' ?></script>

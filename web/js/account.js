@@ -18,6 +18,9 @@ function Account()
     this.tpl_show_account = $('#tpl-manage-accounts-show');
     this.tpl_show_line = $('#tpl-manage-accounts-show-line');
 
+    this.tpl_group_list = $('#tpl-manage-groups-list');
+    console.log(this.tpl_group_list);
+
     this.url_list = url_account_list;
     this.url_get = url_account_get;
 
@@ -123,6 +126,37 @@ function Account()
         that = this;
 
         $.ajax({
+            url: url_group_list,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data, text_status, jq_xhr) {
+                var tmpDiv = $('<div></div>');
+                var div_content = '';
+
+                $.each(data, function(i, item) {
+                    var template = $('#tpl-manage-groups-checkbox');
+
+                    var datas_checkbox = {
+                        checkbox_id: item.id,
+                        checkbox_group_id: 'group[' + item.id + ']',
+                        name: item.name,
+                        checked: item.id == '1' ? 'checked' : '',
+                        disabled: item.id == '1' ? 'disabled' : '',
+                        required: item.id == '1' ? 'required' : ''
+                    }
+
+                    tmpDiv.loadTemplate(
+                        template,
+                        datas_checkbox
+                    );
+
+                    div_content += tmpDiv.html();
+                });
+                that.container.find('#account-main-form .form-group-checkbox').html(div_content);
+            }
+        });
+
+        $.ajax({
             url: url_account_type_get.replace(/--slug--/, type),
             type: 'GET',
             dataType: 'json',
@@ -159,8 +193,22 @@ function Account()
 
                 onSubmitForm(that.container.find('form'), function(data, text_status, jq_xhr) {
                     that.list();
-                });
+                }, null, function(data, text_status, jq_xhr) {
+                    var check = false;
 
+                    $('input[type=checkbox]:checked').each(function() {
+                        var checkbox_id = parseInt($(this).attr('data-checkbox-id'));
+                        if ($.inArray(checkbox_id, security) !== -1) {
+                            check = true;
+                            return false
+                        }
+                    });
+                    if (check === true) {
+                        return true;
+                    }
+                    showError(language.error.nb_min_group);
+                    return false;
+                });
                 that.unWait();
             },
             error: function(jq_xhr, text_status, error_thrown) {
@@ -169,6 +217,8 @@ function Account()
             }
         });
     };
+
+
 
     this.show = function(slug) {
         if ('' === slug) {
@@ -231,4 +281,5 @@ $(document).ready(function(){
     $(document).on('click', '.row-show', function() {
         $(this).find('.col-md-8').selectText();
     });
+
 });

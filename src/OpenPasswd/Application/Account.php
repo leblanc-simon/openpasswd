@@ -117,10 +117,17 @@ class Account extends AbstractApp implements IApplication
                 'account_type_id' => $account_type['id'],
             ));
 
-            $object = $this->retrieveBySlug($slug);
+            $last_object_id = $this->db->lastInsertId();
+
+            if (is_numeric($last_object_id) !== true || $last_object_id <= 0) {
+                throw new \Exception('Impossible to save account');
+            }
 
             // Save fields
-            $this->insertFields($object['id']);
+            $this->insertFields($last_object_id);
+            $this->insertGroups($last_object_id);
+
+            $object = $this->retrieveBySlug($slug);
 
             $this->db->commit();
 
@@ -192,5 +199,34 @@ class Account extends AbstractApp implements IApplication
                 'value' => $field['crypt'] === '1' ? $this->security->encrypt($field_value) : $field_value,
             ));
         }
+    }
+
+    /**
+     * @param int $account_id
+     * @throws \Exception
+     */
+    private function insertGroups($account_id)
+    {
+        $groups = $this->request->get('group');
+
+        foreach ($groups as $group_id => $group_value) {
+            $group = $this->db->executeQuery('SELECT * FROM field WHERE id = ?', array((int)$group_id))->fetch();
+            if (false === $group) {
+                throw new \Exception('Impossible to find group');
+            }
+
+            if (empty($group_value) === true && '1' === $group['required']) {
+                throw new \Exception($group['name'].' is required');
+            }
+
+            $this->db->insert('account_has_group', array(
+                'account_id' => $account_id,
+                'group_id' => $group['id'],
+            ));
+        }
+        $this->db->insert('account_has_group', array(
+            'account_id' => $account_id,
+            'group_id' => 1,
+        ));
     }
 }
