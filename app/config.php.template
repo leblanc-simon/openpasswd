@@ -31,8 +31,20 @@ OpenPasswd\Core\Config::add(array(
     // Template
     'layout'            => __DIR__.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'layout.php',
 
+    // Form Types
+    'form_types'        => array(
+        '\\OpenPasswd\\FormType\\TextType',
+        '\\OpenPasswd\\FormType\\TextareaType',
+        '\\OpenPasswd\\FormType\\DateType',
+        '\\OpenPasswd\\FormType\\NumericType',
+        '\\OpenPasswd\\FormType\\EmailType',
+        '\\OpenPasswd\\FormType\\UrlType',
+    ),
+
     // Crypt
     'crypt_method'      => 'AES-256-CBC',
     'crypt_password'    => '',
     'crypt_iv'          => '',
+    'master_password'   => '',
+    'certificate_oid'   => '1.2.3.4',
 ));

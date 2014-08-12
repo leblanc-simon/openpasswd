@@ -10,6 +10,7 @@
 
 namespace OpenPasswd\Application;
 
+use OpenPasswd\FormType\Collection;
 use OpenPasswd\Security\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use OpenPasswd\Core\ErrorResponse;
@@ -32,6 +33,11 @@ abstract class AbstractApp
     protected $user     = null;
     protected $security = null;
 
+    /**
+     * @var Collection
+     */
+    protected $form_types = null;
+
     protected $table            = null;
     protected $fields           = null;
     protected $order            = null;
@@ -53,6 +59,12 @@ abstract class AbstractApp
             if ($this->user instanceof UserInterface) {
                 $this->security = new Security($this->app, $this->user);
             }
+        }
+
+        $this->form_types = new Collection();
+        foreach (Config::get('form_types') as $classname) {
+            $form_type = new $classname();
+            $this->form_types->add($form_type);
         }
     }
     
@@ -170,6 +182,16 @@ abstract class AbstractApp
     {
         return $this->app['url_generator']->generate($name, $parameters, $reference_type);
     }
+
+
+    /**
+     * @return Collection
+     */
+    public function getFormTypes()
+    {
+        return $this->form_types;
+    }
+
 
     /**
      * @return null|\OpenPasswd\Security\Security

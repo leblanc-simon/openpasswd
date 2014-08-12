@@ -11,10 +11,9 @@
 namespace OpenPasswd\Application;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use OpenPasswd\Core\ErrorResponse;
 
-class Group extends AbstractApp implements IApplication
+class Group extends AbstractApp implements ApplicationInterface
 {
     public function __construct(\Silex\Application $app)
     {

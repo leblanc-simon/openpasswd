@@ -15,7 +15,7 @@
                         <legend><?php echo $this->l10n('main.connect') ?></legend>
                         <div class="form-group">
                             <label for="username"><?php echo $this->l10n('main.username') ?></label>
-                            <input type="text" class="form-control" name="_username" id="username" placeholder="<?php echo $this->l10n('main.username_placeholder') ?>">
+                            <input type="text" class="form-control" name="_username" id="username" placeholder="<?php echo $this->l10n('main.username_placeholder') ?>" autofocus>
                         </div>
                         <div class="form-group">
                             <label for="password"><?php echo $this->l10n('main.password') ?></label>

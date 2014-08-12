@@ -1,6 +1,3 @@
-.idea
 /vendor
 composer.lock
 *.bak
-openpasswd.sublime-project
-openpasswd.sublime-workspace

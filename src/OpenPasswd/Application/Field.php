@@ -11,14 +11,10 @@
 namespace OpenPasswd\Application;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use OpenPasswd\Core\ErrorResponse;
-use OpenPasswd\Core\Config;
 
-class Field extends AbstractApp implements IApplication
+class Field extends AbstractApp implements ApplicationInterface
 {
-    static private $available_types = array('text', 'textarea', 'date', 'numeric', 'email', 'url');
-
     public function __construct(\Silex\Application $app)
     {
         parent::__construct($app);
@@ -142,8 +138,8 @@ class Field extends AbstractApp implements IApplication
             throw new \Exception('Type can\'t be empty', 400);
         }
 
-        if (in_array($type, self::$available_types) === false) {
-            throw new \Exception('Type must be : '.implode(' or ', self::$available_types), 400);
+        if (in_array($type, $this->getFormTypes()->getAllNames()) === false) {
+            throw new \Exception('Type must be : '.implode(' or ', $this->getFormTypes()->getAllNames()), 400);
         }
 
         if (is_numeric($required) === false || ($required != 0 && $required != 1)) {

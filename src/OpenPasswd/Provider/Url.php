@@ -23,7 +23,7 @@ use Silex\Provider\UrlGeneratorServiceProvider;
  */
 class Url
     extends AProvider
-    implements IProvider
+    implements ProviderInterface
 {
     /**
      * Register the provider into the Silex Application

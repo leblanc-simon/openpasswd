@@ -10,7 +10,7 @@
 
 namespace OpenPasswd\Application;
 
-interface IApplication
+interface ApplicationInterface
 {
     /**
      * List all items in the model

@@ -63,9 +63,9 @@ field.crypt: Crypt the field in the database
 field.required: Required
 field.type: Field type
 field.text: Text
-field.long_text: Long text
+field.textarea: Long text
 field.date: Date
-field.number: Number
+field.numeric: Number
 field.email: Email
 field.url: URL
 field.saved: The field is saved
