@@ -210,7 +210,7 @@ class Account extends AbstractApp implements ApplicationInterface
         $groups = $this->request->get('group');
 
         foreach ($groups as $group_id => $group_value) {
-            $group = $this->db->executeQuery('SELECT * FROM field WHERE id = ?', array((int)$group_id))->fetch();
+            $group = $this->db->executeQuery('SELECT * FROM ' . $this->db->quoteIdentifier('group') . ' WHERE id = ?', array((int)$group_id))->fetch();
             if (false === $group) {
                 throw new \Exception('Impossible to find group');
             }
@@ -224,9 +224,13 @@ class Account extends AbstractApp implements ApplicationInterface
                 'group_id' => $group['id'],
             ));
         }
-        $this->db->insert('account_has_group', array(
-            'account_id' => $account_id,
-            'group_id' => 1,
-        ));
+
+        if (in_array('1', $groups) === false) {
+            $this->db->insert('account_has_group', array(
+                'account_id' => $account_id,
+                'group_id' => 1,
+            ));
+        }
+
     }
 }
