@@ -225,7 +225,7 @@ class Account extends AbstractApp implements ApplicationInterface
             ));
         }
 
-        if (in_array('1', $groups) === false) {
+        if (!isset($groups['1'])) {
             $this->db->insert('account_has_group', array(
                 'account_id' => $account_id,
                 'group_id' => 1,

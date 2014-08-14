@@ -187,24 +187,33 @@ function Account()
                 that.container.find('#account-main-form').removeClass('hide');
                 that.container.find('#account-main-form').parent().find('button.hide').removeClass('hide');
 
-                onSubmitForm(that.container.find('form'), function(data, text_status, jq_xhr) {
-                    that.list();
-                }, null, function(data, text_status, jq_xhr) {
-                    var check = false;
+                onSubmitForm(
+                    that.container.find('form'),
+                    function(data, text_status, jq_xhr) {
+                        that.list();
+                    },
+                    null,
+                    function(data, text_status, jq_xhr) {
+                        var check = false;
 
-                    $('input[type=checkbox]:checked').each(function() {
-                        var checkbox_id = parseInt($(this).attr('data-checkbox-id'));
-                        if ($.inArray(checkbox_id, security) !== -1) {
-                            check = true;
-                            return false
+                        $('input[type=checkbox]:checked').each(function() {
+                            var checkbox_id = parseInt($(this).attr('data-checkbox-id'));
+
+                            if ($.inArray(checkbox_id, security) !== -1) {
+                                check = true;
+                                return false
+                            }
+                        });
+
+                        if (check === true) {
+                            return true;
                         }
-                    });
-                    if (check === true) {
-                        return true;
+
+                        showError(language.error.nb_min_group);
+                        return false;
                     }
-                    showError(language.error.nb_min_group);
-                    return false;
-                });
+                );
+
                 that.unWait();
             },
             error: function(jq_xhr, text_status, error_thrown) {
