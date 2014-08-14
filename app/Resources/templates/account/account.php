@@ -26,10 +26,12 @@
                 form_types.templates        = <?php echo json_encode($this->getFormTypes()->getTemplateIds()) ?>;
                 form_types.available_values = <?php echo json_encode($this->getFormTypes()->getAvailableValues()) ?>;
                 form_types.names            = <?php echo json_encode($this->getFormTypes()->getAllNames()) ?>;
+                var enable_groups           = <?php echo json_encode($this->getSecurity()->getEnableGroups()) ?>;
             </script>
             <script type="text/html" id="tpl-manage-accounts-edit"><?php include __DIR__.'/form.php' ?></script>
             <script type="text/html" id="tpl-manage-accounts-list"><?php include __DIR__.'/select.php' ?></script>
             <script type="text/html" id="tpl-manage-accounts-line"><?php include __DIR__.'/option.php' ?></script>
             <script type="text/html" id="tpl-manage-accounts-show"><?php include __DIR__.'/show.php' ?></script>
             <script type="text/html" id="tpl-manage-accounts-show-line"><?php include __DIR__.'/show_line.php' ?></script>
+            <script type="text/html" id="tpl-manage-groups-checkbox"><?php include __DIR__ . '/checkbox.php' ?></script>
             <?php echo $this->getFormTypes()->render() ?>

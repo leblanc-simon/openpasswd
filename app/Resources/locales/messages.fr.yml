@@ -20,6 +20,7 @@ account.select_type: Sélectionner le type de compte à ajouter
 account.type: Type de compte
 account.name: Nom du compte
 account.description: Commentaires
+account.groups: Groupes
 
 user.users: Utilisateurs
 user.list: Liste des utilisateurs
@@ -70,3 +71,4 @@ field.url: URL
 field.saved: Le champs a été enregistré
 
 error.submit_form: Une erreur s'est produite vous empêchant de soumettre le formulaire
+error.nb_min_group: Vous devez choisir au moins un groupe dont vous faites partie

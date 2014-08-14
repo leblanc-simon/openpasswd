@@ -58,8 +58,6 @@ abstract class AbstractApp
             $this->user = $token->getUser();
             if ($this->user instanceof UserInterface) {
                 $this->security = new Security($this->app, $this->user);
-
-
             }
         }
 
@@ -75,7 +73,7 @@ abstract class AbstractApp
      */
     public function listAction()
     {
-        $sql = 'SELECT '.$this->fields.' FROM '.$this->db->quoteIdentifier($this->table).($this->criteria ?: '').' ORDER BY '.$this->order;
+        $sql = 'SELECT DISTINCT '.$this->fields.' FROM '.$this->db->quoteIdentifier($this->table).($this->criteria ?: '').' ORDER BY '.$this->order;
         $objects = $this->db->fetchAll($sql, $this->criteria_values);
 
         return new JsonResponse($objects);
@@ -193,4 +191,14 @@ abstract class AbstractApp
     {
         return $this->form_types;
     }
+
+
+    /**
+     * @return null|\OpenPasswd\Security\Security
+     */
+    public function getSecurity()
+    {
+        return $this->security;
+    }
+
 }

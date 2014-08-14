@@ -263,6 +263,16 @@
             }
         });
 
+        processElements("data-disabled", template, data, function ($elem, value) {
+            if (applyFormatters($elem, value, "disabled")) {
+                $elem[0].disabled = true;
+                $elem.attr('disabled', 'disabled');
+            } else {
+                $elem[0].disabled = false;
+                $elem.removeAttr('disabled');
+            }
+        });
+
         processElements("data-link", template, data, function ($elem, value) {
             var $linkElem = $("<a/>");
             $linkElem.attr("href", applyFormatters($elem, value, "link"));
@@ -343,6 +353,15 @@
                             } else {
                                 $this[0].checked = false;
                                 $this.removeAttr('checked');
+                            }
+                            break;
+                        case "disabled":
+                            if (applyDataBindFormatters(value, this)) {
+                                $this[0].disabled = true;
+                                $this.attr('disabled', 'disabled');
+                            } else {
+                                $this[0].disabled = false;
+                                $this.removeAttr('disabled');
                             }
                             break;
                         default:

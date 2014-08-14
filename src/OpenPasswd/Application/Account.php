@@ -15,6 +15,8 @@ use OpenPasswd\Core\ErrorResponse;
 
 class Account extends AbstractApp implements ApplicationInterface
 {
+    const GROUP_ADMIN = 1;
+
     public function __construct(\Silex\Application $app)
     {
         parent::__construct($app);
@@ -117,10 +119,19 @@ class Account extends AbstractApp implements ApplicationInterface
                 'account_type_id' => $account_type['id'],
             ));
 
-            $object = $this->retrieveBySlug($slug);
+            $last_object_id = $this->db->lastInsertId();
+
+            if (is_numeric($last_object_id) !== true || $last_object_id <= 0) {
+                throw new \Exception('Impossible to save account');
+            }
 
             // Save fields
-            $this->insertFields($object['id']);
+            $this->insertFields($last_object_id);
+
+            // Save groups
+            $this->insertGroups($last_object_id);
+
+            $object = $this->retrieveBySlug($slug);
 
             $this->db->commit();
 
@@ -157,6 +168,12 @@ class Account extends AbstractApp implements ApplicationInterface
             // Save fields
             $this->insertFields($object['id']);
 
+            // Delete old groups
+            $this->db->delete('account_has_group', array('account_id' => $object['id']));
+
+            // Save groups
+            $this->insertGroups($object['id']);
+
             $this->db->commit();
 
             return new JsonResponse(array('message' => 'The account type is save', 'object' => $object), 201);
@@ -192,5 +209,50 @@ class Account extends AbstractApp implements ApplicationInterface
                 'value' => $field['crypt'] === '1' ? $this->security->encrypt($field_value) : $field_value,
             ));
         }
+    }
+
+    /**
+     * @param int $account_id
+     * @throws \Exception
+     */
+    private function insertGroups($account_id)
+    {
+        $groups = $this->request->get('group');
+        if (is_array($groups) === false) {
+            throw new \Exception('group must be an array');
+        }
+
+        // Account must have at least one user group selected
+        $user_groups = $this->getSecurity()->getEnableGroups();
+        $selected_group = array_keys($groups);
+        if (count(array_intersect($user_groups, $selected_group)) === 0) {
+            throw new \Exception('You must select at least one of your groups');
+        }
+
+        foreach ($groups as $group_id => $group_value) {
+            $group = $this->db->executeQuery('
+                SELECT *
+                FROM '.$this->db->quoteIdentifier('group').'
+                WHERE id = ?',
+                array((int)$group_id)
+            )->fetch();
+
+            if (false === $group) {
+                throw new \Exception('Impossible to find group');
+            }
+
+            $this->db->insert('account_has_group', array(
+                'account_id' => $account_id,
+                'group_id' => $group['id'],
+            ));
+        }
+
+        if (!isset($groups[self::GROUP_ADMIN])) {
+            $this->db->insert('account_has_group', array(
+                'account_id' => $account_id,
+                'group_id' => self::GROUP_ADMIN,
+            ));
+        }
+
     }
 }

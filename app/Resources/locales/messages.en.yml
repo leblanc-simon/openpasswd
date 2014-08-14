@@ -20,6 +20,7 @@ account.select_type: Select the account type to add
 account.type: Account type
 account.name: Account name
 account.description: Comments
+account.groups: Groups
 
 user.users: Users
 user.list: List of users
@@ -70,3 +71,4 @@ field.url: URL
 field.saved: The field is saved
 
 error.submit_form: An error occured preventing you from submitting the form
+error.nb_min_group: You must choose at least one group to which you belong

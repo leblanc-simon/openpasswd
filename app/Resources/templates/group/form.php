@@ -19,6 +19,7 @@
                             <label for="groups-add-description"><?php echo $this->l10n('group.description') ?></label>
                             <textarea class="form-control" name="description" id="groups-add-description" placeholder="Entrez la description du groupe (sera utilisée comme aide à la saisie)" data-content="description"></textarea>
                         </div>
+
                         <button type="submit" class="btn btn-success">
                             <span class="glyphicon glyphicon-ok"></span>
                             <?php echo $this->l10n('save') ?>

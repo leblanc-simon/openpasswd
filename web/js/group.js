@@ -15,6 +15,7 @@ function Group()
     this.tpl_admin_edit = $('#tpl-manage-groups-edit');
     this.tpl_admin_list = $('#tpl-manage-groups-list');
     this.tpl_admin_line = $('#tpl-manage-groups-line');
+    this.tpl_admin_checkbox = $('#tpl-manage-groups-checkbox');
 
     this.url_list = url_group_list;
     this.url_get = url_group_get;
