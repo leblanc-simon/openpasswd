@@ -215,8 +215,8 @@ class Account extends AbstractApp implements ApplicationInterface
                 throw new \Exception('Impossible to find group');
             }
 
-            if (empty($group_value) === true && '1' === $group['required']) {
-                throw new \Exception($group['name'].' is required');
+            if (empty($group_value) === true) {
+                throw new \Exception('$group_value is empty');
             }
 
             $this->db->insert('account_has_group', array(
