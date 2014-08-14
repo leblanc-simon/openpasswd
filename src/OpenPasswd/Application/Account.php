@@ -15,6 +15,8 @@ use OpenPasswd\Core\ErrorResponse;
 
 class Account extends AbstractApp implements ApplicationInterface
 {
+    const GROUP_ADMIN = 1;
+
     public function __construct(\Silex\Application $app)
     {
         parent::__construct($app);
@@ -125,6 +127,8 @@ class Account extends AbstractApp implements ApplicationInterface
 
             // Save fields
             $this->insertFields($last_object_id);
+
+            // Save groups
             $this->insertGroups($last_object_id);
 
             $object = $this->retrieveBySlug($slug);
@@ -163,6 +167,12 @@ class Account extends AbstractApp implements ApplicationInterface
 
             // Save fields
             $this->insertFields($object['id']);
+
+            // Delete old groups
+            $this->db->delete('account_has_group', array('account_id' => $object['id']));
+
+            // Save groups
+            $this->insertGroups($object['id']);
 
             $this->db->commit();
 
@@ -208,15 +218,27 @@ class Account extends AbstractApp implements ApplicationInterface
     private function insertGroups($account_id)
     {
         $groups = $this->request->get('group');
+        if (is_array($groups) === false) {
+            throw new \Exception('group must be an array');
+        }
+
+        // Account must have at least one user group selected
+        $user_groups = $this->getSecurity()->getEnableGroups();
+        $selected_group = array_keys($groups);
+        if (count(array_intersect($user_groups, $selected_group)) === 0) {
+            throw new \Exception('You must select at least one of your groups');
+        }
 
         foreach ($groups as $group_id => $group_value) {
-            $group = $this->db->executeQuery('SELECT * FROM ' . $this->db->quoteIdentifier('group') . ' WHERE id = ?', array((int)$group_id))->fetch();
+            $group = $this->db->executeQuery('
+                SELECT *
+                FROM '.$this->db->quoteIdentifier('group').'
+                WHERE id = ?',
+                array((int)$group_id)
+            )->fetch();
+
             if (false === $group) {
                 throw new \Exception('Impossible to find group');
-            }
-
-            if (empty($group_value) === true) {
-                throw new \Exception('$group_value is empty');
             }
 
             $this->db->insert('account_has_group', array(
@@ -225,10 +247,10 @@ class Account extends AbstractApp implements ApplicationInterface
             ));
         }
 
-        if (!isset($groups['1'])) {
+        if (!isset($groups[self::GROUP_ADMIN])) {
             $this->db->insert('account_has_group', array(
                 'account_id' => $account_id,
-                'group_id' => 1,
+                'group_id' => self::GROUP_ADMIN,
             ));
         }
 

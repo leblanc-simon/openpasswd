@@ -38,7 +38,7 @@ function Account()
     this.list = function() {
         this.wait();
         this.reset();
-        that = this;
+        var that = this;
 
         $.ajax({
             url: this.url_list,
@@ -86,7 +86,7 @@ function Account()
     this.prepareForm = function() {
         this.wait();
         this.reset();
-        that = this;
+        var that = this;
 
         $.ajax({
             url: url_account_type_list,
@@ -104,8 +104,40 @@ function Account()
                     that.data_pre_add,
                     {
                         success: function() {
-                            that.top_container.removeClass('hide');
-                            $('#account-select-type select').on('change', function() { that.addForm(this.value) });
+                            $.ajax({
+                                url: url_group_list,
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function(data, text_status, jq_xhr) {
+                                    var tmpDiv = $('<div></div>');
+                                    var div_content = '';
+
+                                    $.each(data, function(i, item) {
+                                        var template = $('#tpl-manage-groups-checkbox');
+
+                                        var datas_checkbox = {
+                                            group_id: item.id,
+                                            checkbox_id: 'group_' + item.id,
+                                            checkbox_group_id: 'group[' + item.id + ']',
+                                            name: item.name,
+                                            checked: item.id == '1' ? 'checked' : '',
+                                            disabled: item.id == '1' ? 'disabled' : '',
+                                            required: item.id == '1' ? 'required' : ''
+                                        }
+
+                                        tmpDiv.loadTemplate(
+                                            template,
+                                            datas_checkbox
+                                        );
+
+                                        div_content += tmpDiv.html();
+                                    });
+                                    that.container.find('#account-main-form .form-group-checkbox').html(div_content);
+
+                                    that.top_container.removeClass('hide');
+                                    $('#account-select-type select').on('change', function() { that.addForm(this.value) });
+                                }
+                            });
                         },
                         error: function() { alert('error'); },
                         complete: that.unWait()
@@ -117,43 +149,13 @@ function Account()
 
     this.resetForm = function() {
         $('#account-main-form .main-form').html();
+        this.container.find('form').unbind('submit');
     };
 
     this.addForm = function(type) {
         this.resetForm();
         this.wait();
-        that = this;
-
-        $.ajax({
-            url: url_group_list,
-            type: 'GET',
-            dataType: 'json',
-            success: function(data, text_status, jq_xhr) {
-                var tmpDiv = $('<div></div>');
-                var div_content = '';
-
-                $.each(data, function(i, item) {
-                    var template = $('#tpl-manage-groups-checkbox');
-
-                    var datas_checkbox = {
-                        checkbox_id: item.id,
-                        checkbox_group_id: 'group[' + item.id + ']',
-                        name: item.name,
-                        checked: item.id == '1' ? 'checked' : '',
-                        disabled: item.id == '1' ? 'disabled' : '',
-                        required: item.id == '1' ? 'required' : ''
-                    }
-
-                    tmpDiv.loadTemplate(
-                        template,
-                        datas_checkbox
-                    );
-
-                    div_content += tmpDiv.html();
-                });
-                that.container.find('#account-main-form .form-group-checkbox').html(div_content);
-            }
-        });
+        var that = this;
 
         $.ajax({
             url: url_account_type_get.replace(/--slug--/, type),
@@ -199,7 +201,7 @@ function Account()
                         $('input[type=checkbox]:checked').each(function() {
                             var checkbox_id = parseInt($(this).attr('data-checkbox-id'));
 
-                            if ($.inArray(checkbox_id, security) !== -1) {
+                            if ($.inArray(checkbox_id, enable_groups) !== -1) {
                                 check = true;
                                 return false
                             }
@@ -232,7 +234,7 @@ function Account()
 
         this.resetForm();
         this.wait();
-        that = this;
+        var that = this;
 
         $.ajax({
             url: url_account_show.replace(/--slug--/, slug),

@@ -26,7 +26,7 @@
                 form_types.templates        = <?php echo json_encode($this->getFormTypes()->getTemplateIds()) ?>;
                 form_types.available_values = <?php echo json_encode($this->getFormTypes()->getAvailableValues()) ?>;
                 form_types.names            = <?php echo json_encode($this->getFormTypes()->getAllNames()) ?>;
-                var security                = <?php echo json_encode($this->getSecurity()->getEnableGroups()) ?>;
+                var enable_groups           = <?php echo json_encode($this->getSecurity()->getEnableGroups()) ?>;
             </script>
             <script type="text/html" id="tpl-manage-accounts-edit"><?php include __DIR__.'/form.php' ?></script>
             <script type="text/html" id="tpl-manage-accounts-list"><?php include __DIR__.'/select.php' ?></script>
