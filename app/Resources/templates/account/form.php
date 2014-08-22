@@ -29,7 +29,13 @@
                             <textarea name="description" id="account_description" class="form-control" data-content="account-description">
                             </textarea>
                         </div>
+                        <div class="form-group">
+                            <legend data-content="legend"><?php echo $this->l10n('account.groups') ?></legend>
+                            <div class="form-group-checkbox">
+                            </div>
+                        </div>
                     </fieldset>
+
 
                     <fieldset>
                         <button type="submit" class="btn btn-success hide">

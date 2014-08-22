@@ -27,5 +27,6 @@
 
         'error' => array(
             'submit_form' => $this->l10n('error.submit_form'),
+            'nb_min_group' => $this->l10n('error.nb_min_group'),
         )
     )); ?>;</script>
