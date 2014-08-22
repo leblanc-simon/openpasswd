@@ -8,20 +8,20 @@
  * file that was distributed with this source code.
  */
 
-OpenPasswd\Core\Config::add(array(
+OpenPasswd\Core\Config::add([
     'debug' => false,
     
     // Doctrine configuration 
     // it's the db.config options
     // @see http://silex.sensiolabs.org/doc/providers/doctrine.html
-    'doctrine-configuration' => array(
+    'doctrine-configuration' => [
         'driver'     => 'pdo_mysql',
         'dbname'     => 'openpasswd',
         'host'       => 'localhost',
         'user'       => 'root',
         'password'   => '',
         'charset'    => 'utf8',
-    ),
+    ],
 
     // Locales
     'locales_dir'       => __DIR__.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'locales',
@@ -32,14 +32,14 @@ OpenPasswd\Core\Config::add(array(
     'layout'            => __DIR__.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'layout.php',
 
     // Form Types
-    'form_types'        => array(
+    'form_types'        => [
         '\\OpenPasswd\\FormType\\TextType',
         '\\OpenPasswd\\FormType\\TextareaType',
         '\\OpenPasswd\\FormType\\DateType',
         '\\OpenPasswd\\FormType\\NumericType',
         '\\OpenPasswd\\FormType\\EmailType',
         '\\OpenPasswd\\FormType\\UrlType',
-    ),
+    ],
 
     // Crypt
     'crypt_method'      => 'AES-256-CBC',
@@ -47,4 +47,27 @@ OpenPasswd\Core\Config::add(array(
     'crypt_iv'          => '',
     'master_password'   => '',
     'certificate_oid'   => '1.2.3.4',
-));
+
+    // OpenSSL
+    'openssl_options'   => [
+        'config'            => '/etc/ssl/openssl.cnf',
+        'digest_alg'        => 'sha1',
+        'private_key_bits'  => 4096,
+        'private_key_type'  => OPENSSL_KEYTYPE_RSA,
+        'x509_extensions'   => 'v3_ca',
+    ],
+    'openssl_dn'        => [
+        'countryName'           => 'FR',
+        'stateOrProvinceName'   => 'Nord',
+        'localityName'          => 'Lille',
+        'organizationName'      => 'Portailpro',
+        'organizationalUnitName'=> 'IT',
+    ],
+    'openssl_ca'        => [
+        'private_key' => '/etc/ssl/openpasswd/private/ca.key',
+        'certificate' => '/etc/ssl/openpasswd/certs/ca.crt',
+    ],
+    'openssl_duration' => 1825,
+    'openssl_storage'  => __DIR__.DIRECTORY_SEPARATOR.'datas',
+    'openssl_serial'   => __DIR__.DIRECTORY_SEPARATOR.'datas'.DIRECTORY_SEPARATOR.'serial',
+]);
