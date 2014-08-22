@@ -103,7 +103,7 @@ class CertificateCommand extends Command
 
             $this->$option = $dialog->askHiddenResponseAndValidate(
                 $this->output,
-                $message.' : ',
+                '<question>'.$message.' : </question>',
                 $validator,
                 false,
                 null
@@ -124,6 +124,9 @@ class CertificateCommand extends Command
         }
 
         $filename = $this->input->getOption('output');
+        if (0 === preg_match('#^(\./|\.\./|/)#', $filename)) {
+            $filename = Config::get('openssl_storage').DIRECTORY_SEPARATOR.$filename;
+        }
         $directory = pathinfo($filename, PATHINFO_DIRNAME);
 
         if (is_dir($directory) === false) {
@@ -209,7 +212,9 @@ class CertificateCommand extends Command
             $csr,
             'file://'.$ca['certificate'],
             ['file://'.$ca['private_key'], $this->capass],
-            Config::get('openssl_duration', 365)
+            Config::get('openssl_duration', 365),
+            null,
+            $this->getSerial()
         );
 
         if (false === $certificate) {
@@ -249,6 +254,40 @@ class CertificateCommand extends Command
     }
 
 
+    /**
+     * Return the next serial to use
+     *
+     * @return int  the next serial to use
+     */
+    private function getSerial()
+    {
+        $serial_filename = Config::get('openssl_serial');
+        $serial = 0;
+        if (true === file_exists($serial_filename)) {
+            $serial = file_get_contents($serial_filename);
+            if (true === is_numeric($serial)) {
+                $serial = (int)$serial;
+            }
+        }
+
+        $serial++;
+
+        if (false === @file_put_contents($serial_filename, $serial)) {
+            $this->output->writeln('<error>Impossible to write the new serial in '.$serial_filename.'</error>');
+        }
+
+        return $serial;
+    }
+
+
+    /**
+     * Export the PKCS#12 certificat
+     *
+     * @param   resource|string     $certificate    The x509 certificate
+     * @param   resource            $private_key    The private key of the certificate
+     * @return  string                              The PKCS#12 certificate
+     * @throws  \RuntimeException                   if the export failed
+     */
     private function exportPkcs12($certificate, $private_key)
     {
         if (false === openssl_x509_export($certificate, $x509, true)) {
